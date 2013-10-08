@@ -1,0 +1,5 @@
+Q1, there are 2 source folder not presented,
+A1, project --> properties --> buildPath --> add folder --> add 1 to all missed folders -->ok.
+A1, then edit buildpath again. remove those new 1 folder and clean include/exclude params.
+
+1, add controller, web.xml, dependency,
