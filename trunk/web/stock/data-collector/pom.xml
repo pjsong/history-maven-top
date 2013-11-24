@@ -7,4 +7,46 @@
   </parent>
   <groupId>mvnhistory.web.stock</groupId>
   <artifactId>data-collector</artifactId>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-jpa</artifactId>
+  		<version>2.0.8</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-orm</artifactId>
+  		<version>3.2.4.RELEASE</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-test</artifactId>
+  		<version>3.2.4.RELEASE</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-core</artifactId>
+  		<version>3.2.4.RELEASE</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>javax.persistence</groupId>
+  		<artifactId>persistence-api</artifactId>
+  		<version>1.0.2</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>dbclient.sn</groupId>
+  		<artifactId>dbClient</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.quartz-scheduler</groupId>
+  		<artifactId>quartz</artifactId>
+  		<version>2.2.0</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>javax.annotation</groupId>
+  		<artifactId>javax.annotation-api</artifactId>
+  		<version>1.2</version>
+  	</dependency>
+  </dependencies>
 </project>

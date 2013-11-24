@@ -7,7 +7,6 @@
   <name>history-mvn-top</name>
   <url>https://history-maven-top.googlecode.com/svn/trunk/</url>
   <modules>
-  	<module>dbclient</module>
   	<module>3rd</module>
   	<module>web</module>
   	<module>individual</module>

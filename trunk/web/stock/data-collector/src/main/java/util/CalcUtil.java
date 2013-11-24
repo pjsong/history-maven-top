@@ -40,6 +40,9 @@ public class CalcUtil {
 		BigDecimal bd = new BigDecimal(logupper/loglower);
 		return bd.setScale(0, 4).intValue();
 	}
+	
+	
+	
 	public static void main(String[] args){
 		for (int i = 1; i < 10; i++) {
 			int fib = getFiboNacci(i);
