@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +85,29 @@ public class NetEaseHistoryRead {
 	    dto.setChgRate(Double.valueOf(data[10]));
 	    dto.setTotalMarketValue(Double.valueOf(data[13]));
 	    dto.setCurrentMarketValue(Double.valueOf(data[14]));
-	    dalClient.persist(dto);
+	    if(!tryPersist(dto, 3)){
+	    	throw new RuntimeException();
+	    }
+	}
+	
+	private boolean tryPersist(NetEaseDTO dto, int times) {
+		boolean succeedFlag = false;
+		while (times > 0) {
+			try {
+				dalClient.persist(dto);
+				succeedFlag = true;
+			} catch (Exception e) {
+				times--;
+				try {
+					TimeUnit.SECONDS.sleep(10);
+				} catch (InterruptedException e1) {
+				}
+			}
+			if(succeedFlag){
+				return true;
+			}
+		}
+		return false;
 	}
 	/**start month, day, year**/
     private String getParameter(String code) {
