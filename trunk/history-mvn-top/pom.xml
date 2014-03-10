@@ -9,7 +9,6 @@
   <modules>
 
   	<module>../dbClient</module>
-  	<module>../framework</module>
   	<module>../3rd</module>
   	<module>../individual</module>
   	<module>../web</module>
