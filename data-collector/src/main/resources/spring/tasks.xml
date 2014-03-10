@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+  
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="siteLive" class="codelist.CodeLoader">
+		<property name="codeFiles" value="classpath*:stock_data/code_list/*.SNT" />
+		<property name="code_list_prop" ref="code_list" />  
+	</bean>
+	<bean id="code_list"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>props/code_list.properties</value>
+			</list>
+		</property>
+	</bean>  
+</beans>

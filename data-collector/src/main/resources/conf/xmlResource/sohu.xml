@@ -1,0 +1,1803 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="sohu">
+	<sql id="query_latest_by_code">
+    	<![CDATA[
+    	    	SELECT max(createDate) as createDate, min(createDate) as minCreateDate from sohu_history WHERE code= :code
+    	]]>
+	</sql>
+	<sql id="update_min_max_by_code">
+    	<![CDATA[
+    	    	update sohu_history_min_max_date_of_code set maxDate=:date WHERE code= :code
+    	]]>
+	</sql>
+	
+    <sql id="load_min_max_all_code">
+    	<![CDATA[
+    	    	SELECT code, minDate, maxDate from sohu_history_min_max_date_of_code order by code asc
+    	]]>
+	</sql>
+	    <sql id="query_min_max_by_code">
+    	<![CDATA[
+    	    	SELECT * from sohu_history_min_max_date_of_code where code= :code
+    	]]>
+	</sql>
+	<sql id="query_price_by_code_asc">
+    	<![CDATA[
+    	    	SELECT rowId, code, createDate, priceHigh, priceLow, volumn from sohu_history WHERE code= :code order by createDate asc
+    	]]>
+	</sql>
+	<sql id="query_price_by_code_desc">
+    	<![CDATA[
+    	    	SELECT rowId, code, createDate, priceHigh, priceLow, volumn from sohu_history WHERE code= :code order by createDate desc
+    	]]>
+	</sql>
+	<sql id="query_statistics_by_code_date_stats">
+    	<![CDATA[
+    	    	SELECT * from sohu_history WHERE code= :code and createDate = :createDate order by createDate desc
+    	]]>
+	</sql>
+	<sql id="query_latest_calculated_day">
+    	<![CDATA[
+    	    	SELECT * from sohu_statistics WHERE code= :code order by createDate desc
+    	]]>
+	</sql>
+	<!-- 根据sapOrderId查询omsId -->
+	<sql id="queryOrderIdBySapOrderId">
+    	<![CDATA[
+    	    	SELECT order_id FROM So_ordi WHERE sap_order_id =:sapOrderId  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据sapOrderId查询OrderItemId -->
+	<sql id="queryOrderItemIdBySapOrderId">
+    	<![CDATA[
+    	    	SELECT order_item_id FROM So_ordi WHERE sap_order_id =:sapOrderId  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据omsId查询SO_ORDI表中的内容 -->
+	<sql id="queryOrdisByOrderId">
+    	<![CDATA[
+    	    	SELECT 
+    	    	ROW_ID,
+    		      ORDER_ID,
+    		      ORDER_ITEM_ID,
+    		      B2C_ORDER_ID as b_2c_order_id,
+    		      B2CORDER_ITEM_ID as b_2corder_item_id,
+    		      SAP_ORDER_ID,
+    		      ORDER_TYPE,
+    		      POSORDER_ID,
+    		      DIST_CHANNEL,
+    		      STORE_CODE,
+    		      COMMODITY_CODE,
+    		      SAPPRODUCT_CODE,
+    		      COMMODITY_NAME,
+    		      EAN_CODE,
+    		      SUPPLIER_CODE,
+    		      PRODUCT_LEVEL,
+    		      SALE_ORG,
+    		      SALE_NUM,
+    		      SALE_UNIT,
+    		      UNIT_PRICE,
+    		      SAL_ORG_SHOP,
+    		      STOCK_AREA,
+    		      PROVIDE_ADDRESS,
+    		      SERVICE_FEE,
+    		      TRANSPORT_FEE,
+    		      PAY_AMOUNT,
+    		      TOTAL_AMOUNT,
+    		      TASK_FLAG,
+    		      HAS_SERVICE,
+    		      MAINTAIN_NUM,
+    		      ENCHASE_DETAIL,
+    		      BOL_NO,
+    		      SHIP_CONDITION,
+    		      INFO_SOURCE,
+    		      PURCHASE_FLAG,
+    		      ADS_PAGE,
+    		      CASHER_ID,
+    		      SALES_PERSON,
+    		      PROTION_ACTION_CODE,
+    		      COUPON_TOTAL_MONEY,
+    		      MANAGER_CARD_MONEY,
+    		      VOUCHER_TOTAL_MONEY,
+    		      MANAGER_CARD_NO,
+    		      DISTRIBUTE_TYPE,
+    		      CONSUME_TERM,
+    		      HOPE_ARRIVAL_TIME,
+    		      PLAN_OUT_TIME,
+    		      DELIVERY_COMMENTS,
+    		      PROM_TICKET_MONEY,
+    		      PICKUP_SITES_CODE,
+    		      GIFG_NUM,
+    		      IF_PART_SEND,
+    		      BILL_TYPE,
+    		      ORDITM_CLASS,
+    		      ORDER_ITEM_STAUTS,
+    		      ORDER_ITEM_REMARK,
+    		      CREATED_BY,
+    		      CREATED_TIME,
+    		      LAST_UPD_BY,
+    		      LAST_UPD_TIME,
+    		      ACTIVE_FLAG,
+    		      REMARK,
+    		      BIZ_FLOW_CODE,
+    		      DIVISION,
+    		      SUP_RPSTRY_CODE,
+    		      SAP_VOUCHER_NO,
+    		      AGENCY_FLAG,
+    		      PRICE_FILE_NO,
+    		      SUP_PROVIDE_ADDRESS,
+    		      COM_CHARACTER,
+    		      I_UNIK,
+    		      PAY_MODE_NUM,
+    		      INVOICE_PRINT_SHOP,
+    		      DELIVERY_AREA,
+    		      PACKAGE_NO,
+    		      MAINTAIN_FLAG,
+    		      SETMEAL_CODE,
+    		      IF_PART_CANCEL,
+    		      DISTRIBUTE_PROVIDER,
+    		      PAY_TYPE,
+    		      PAY_TERMINAL,
+    		      CASHER_TERMINAL_ID,
+    		      CURRENCY_TYPE,
+    		      POINT_AMOUNT,
+    		      AB_BANK_FLAG,
+    		      SERIAL_NUMBER,
+    		      IMPREFECTION_GRADE,
+    		      C_PROTOTYPE_ID,
+    		      RELATION_ORDER_ITEM_ID,
+    		      INEVITABLE_FLAG,
+    		      RECEIPT_TYPE,
+    		      DELI_SIGNATURE_TYPE,
+    		      AGREEMENT_ID,
+    		      AGREEMENT_TYPE,
+    		      SPECIAL_BUSINESS,
+    		      CMF_ORDER_TYPE,
+    		      CMF_ORDER_NAME,
+    		      POINT_MONEY,
+    		      C_PROTOTYPE_EAN,
+    		      INVOICE_ID,
+    		      B2C_BUSINESS_ORDER AS B_2C_BUSINESS_ORDER ,
+    		      OVER_SALE_QTY,
+    		      DELI_PRIORITY,
+    		      PURCHASE_SEND_STATUS,
+    		      CUSTOM_ORDER_PACKAGE_ID,
+    		      REF_GOODS_CODE,
+    		      SOURCE_SYSTEM,
+    		      IS_INVOICE,
+    		      MUTIPLE_DELI_FLAG,
+    		      SERIAL_NUMBER2 as serial_number_2,
+    		      VIEW_NUMBER1 as view_number_1,
+    		      VIEW_NUMBER2 as view_number_2,
+    		      VIEW_FLAG1 as view_flag_1,
+    		      VIEW_FLAG2 as view_flag_2,
+    		      REAL_SALES_PERSON,
+    		      ENERGY_SAVED_FLAG,
+    		      TOCOUNTRY_FLAG,
+    		      SPECIAL_RETURN_FLAG       
+    	    	FROM So_ordi WHERE order_id =:omsId  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单号查询订单行信息 -->
+	<sql id="query_ordi_by_orderId">
+    	<![CDATA[
+    	SELECT 	
+    	ROW_ID,
+    		      ORDER_ID,
+    		      ORDER_ITEM_ID,
+    		      B2C_ORDER_ID as b_2c_order_id,
+    		      B2CORDER_ITEM_ID as b_2corder_item_id,
+    		      SAP_ORDER_ID,
+    		      ORDER_TYPE,
+    		      POSORDER_ID,
+    		      DIST_CHANNEL,
+    		      STORE_CODE,
+    		      COMMODITY_CODE,
+    		      SAPPRODUCT_CODE,
+    		      COMMODITY_NAME,
+    		      EAN_CODE,
+    		      SUPPLIER_CODE,
+    		      PRODUCT_LEVEL,
+    		      SALE_ORG,
+    		      SALE_NUM,
+    		      SALE_UNIT,
+    		      UNIT_PRICE,
+    		      SAL_ORG_SHOP,
+    		      STOCK_AREA,
+    		      PROVIDE_ADDRESS,
+    		      SERVICE_FEE,
+    		      TRANSPORT_FEE,
+    		      PAY_AMOUNT,
+    		      TOTAL_AMOUNT,
+    		      TASK_FLAG,
+    		      HAS_SERVICE,
+    		      MAINTAIN_NUM,
+    		      ENCHASE_DETAIL,
+    		      BOL_NO,
+    		      SHIP_CONDITION,
+    		      INFO_SOURCE,
+    		      PURCHASE_FLAG,
+    		      ADS_PAGE,
+    		      CASHER_ID,
+    		      SALES_PERSON,
+    		      PROTION_ACTION_CODE,
+    		      COUPON_TOTAL_MONEY,
+    		      MANAGER_CARD_MONEY,
+    		      VOUCHER_TOTAL_MONEY,
+    		      MANAGER_CARD_NO,
+    		      DISTRIBUTE_TYPE,
+    		      CONSUME_TERM,
+    		      HOPE_ARRIVAL_TIME,
+    		      PLAN_OUT_TIME,
+    		      DELIVERY_COMMENTS,
+    		      PROM_TICKET_MONEY,
+    		      PICKUP_SITES_CODE,
+    		      GIFG_NUM,
+    		      IF_PART_SEND,
+    		      BILL_TYPE,
+    		      ORDITM_CLASS,
+    		      ORDER_ITEM_STAUTS,
+    		      ORDER_ITEM_REMARK,
+    		      CREATED_BY,
+    		      CREATED_TIME,
+    		      LAST_UPD_BY,
+    		      LAST_UPD_TIME,
+    		      ACTIVE_FLAG,
+    		      REMARK,
+    		      BIZ_FLOW_CODE,
+    		      DIVISION,
+    		      SUP_RPSTRY_CODE,
+    		      SAP_VOUCHER_NO,
+    		      AGENCY_FLAG,
+    		      PRICE_FILE_NO,
+    		      SUP_PROVIDE_ADDRESS,
+    		      COM_CHARACTER,
+    		      I_UNIK,
+    		      PAY_MODE_NUM,
+    		      INVOICE_PRINT_SHOP,
+    		      DELIVERY_AREA,
+    		      PACKAGE_NO,
+    		      MAINTAIN_FLAG,
+    		      SETMEAL_CODE,
+    		      IF_PART_CANCEL,
+    		      DISTRIBUTE_PROVIDER,
+    		      PAY_TYPE,
+    		      PAY_TERMINAL,
+    		      CASHER_TERMINAL_ID,
+    		      CURRENCY_TYPE,
+    		      POINT_AMOUNT,
+    		      AB_BANK_FLAG,
+    		      SERIAL_NUMBER,
+    		      IMPREFECTION_GRADE,
+    		      C_PROTOTYPE_ID,
+    		      RELATION_ORDER_ITEM_ID,
+    		      INEVITABLE_FLAG,
+    		      RECEIPT_TYPE,
+    		      DELI_SIGNATURE_TYPE,
+    		      AGREEMENT_ID,
+    		      AGREEMENT_TYPE,
+    		      SPECIAL_BUSINESS,
+    		      CMF_ORDER_TYPE,
+    		      CMF_ORDER_NAME,
+    		      POINT_MONEY,
+    		      C_PROTOTYPE_EAN,
+    		      INVOICE_ID,
+    		      B2C_BUSINESS_ORDER AS B_2C_BUSINESS_ORDER ,
+    		      OVER_SALE_QTY,
+    		      DELI_PRIORITY,
+    		      PURCHASE_SEND_STATUS,
+    		      CUSTOM_ORDER_PACKAGE_ID,
+    		      REF_GOODS_CODE,
+    		      SOURCE_SYSTEM,
+    		      IS_INVOICE,
+    		      MUTIPLE_DELI_FLAG,
+    		      SERIAL_NUMBER2 as serial_number_2,
+    		      VIEW_NUMBER1 as view_number_1,
+    		      VIEW_NUMBER2 as view_number_2,
+    		      VIEW_FLAG1 as view_flag_1,
+    		      VIEW_FLAG2 as view_flag_2,
+    		      REAL_SALES_PERSON,
+    		      ENERGY_SAVED_FLAG,
+    		      TOCOUNTRY_FLAG,
+    		      SPECIAL_RETURN_FLAG       
+    	FROM	So_ordi 
+    	WHERE	order_id = :orderId AND bill_type = :billType AND active_flag = :activeFlag  WITH CS
+    		
+    	]]>
+	</sql>
+	<!-- 查询代收代付订单行信息 -->
+	<sql id="queryOrdiByOrdiId">
+		<![CDATA[
+			SELECT
+				ORDER_ID as orderId, 
+				ORDER_ITEM_ID as orderItemId, 
+				B2C_ORDER_ID as b_2cOrderId, 
+				B2CORDER_ITEM_ID as b_2corderItmeId,
+				B2C_BUSINESS_ORDER as b_2cBusinessOrder,
+				OVER_SALE_QTY as overSaleQty,
+				SAP_ORDER_ID as sapOrderId, 
+				ORDER_TYPE as orderType, 
+				POSORDER_ID as posorderId, 
+				DIST_CHANNEL as distChannel, 
+				STORE_CODE as storeCode,
+				COMMODITY_CODE as commodityCode,
+				SAPPRODUCT_CODE as sapproductCode,
+				COMMODITY_NAME as commodityName,
+				EAN_CODE as eanCode,
+				SUPPLIER_CODE as supplierCode,
+				PRODUCT_LEVEL as productLevel, 
+				SALE_ORG as saleOrg,
+				SALE_NUM as saleNum,
+				SALE_UNIT as saleUnit,
+				UNIT_PRICE as unitPrice,
+				SAL_ORG_SHOP as salOrgShop,
+				STOCK_AREA as stockArea,
+				PROVIDE_ADDRESS as provideAddress,
+				SERVICE_FEE as serviceFee,
+				TRANSPORT_FEE as transportFee,
+				PAY_AMOUNT as payAmount,
+				TOTAL_AMOUNT as totalAmount,
+				TASK_FLAG as taskFlag,
+				HAS_SERVICE as hasService,
+				MAINTAIN_NUM as maintainNum,
+				ENCHASE_DETAIL as enchaseDetail,
+				BOL_NO as bolNo,
+				SHIP_CONDITION as shipCondition,
+				PURCHASE_FLAG as purchaseFlag,
+				CASHER_ID as casherId,
+				SALES_PERSON as salesPerson,
+				PROTION_ACTION_CODE as protionActionCode,
+				COUPON_TOTAL_MONEY as couponTotalMoney,
+				VOUCHER_TOTAL_MONEY as voucherTotalMoney,
+				DISTRIBUTE_TYPE as distributeType,
+				CONSUME_TERM as consumeTerm,
+				HOPE_ARRIVAL_TIME as consumeTerm,
+				PLAN_OUT_TIME as planOutTime,
+				DELIVERY_COMMENTS as deliveryComments,
+				PROM_TICKET_MONEY as promTicketMoney,
+				PICKUP_SITES_CODE as pickupSitesCode,
+				GIFG_NUM as gifgNum,
+				IF_PART_SEND as ifPartCancel,
+				ORDITM_CLASS as orditmClass,
+				ORDER_ITEM_STAUTS as orderItemStauts,
+				ORDER_ITEM_REMARK as orderItemRemark,
+				REMARK as remark
+			FROM SO_ORDI
+			WHERE ORDER_ID =:ORDER_ID
+			AND ORDER_ITEM_ID =:ORDER_ITEM_ID
+			AND ACTIVE_FLAG =:ACTIVE_FLAG  WITH CS
+		]]>
+	</sql>
+	<!-- 根据pos单号查询订单行 -->
+	<sql id="query_ordi_by_posNo_without_activeFlag">
+    	<![CDATA[
+    		SELECT 	  
+    		      ROW_ID,
+    		      ORDER_ID,
+    		      ORDER_ITEM_ID,
+    		      B2C_ORDER_ID as b_2c_order_id,
+    		      B2CORDER_ITEM_ID as b_2corder_item_id,
+    		      SAP_ORDER_ID,
+    		      ORDER_TYPE,
+    		      POSORDER_ID,
+    		      DIST_CHANNEL,
+    		      STORE_CODE,
+    		      COMMODITY_CODE,
+    		      SAPPRODUCT_CODE,
+    		      COMMODITY_NAME,
+    		      EAN_CODE,
+    		      SUPPLIER_CODE,
+    		      PRODUCT_LEVEL,
+    		      SALE_ORG,
+    		      SALE_NUM,
+    		      SALE_UNIT,
+    		      UNIT_PRICE,
+    		      SAL_ORG_SHOP,
+    		      STOCK_AREA,
+    		      PROVIDE_ADDRESS,
+    		      SERVICE_FEE,
+    		      TRANSPORT_FEE,
+    		      PAY_AMOUNT,
+    		      TOTAL_AMOUNT,
+    		      TASK_FLAG,
+    		      HAS_SERVICE,
+    		      MAINTAIN_NUM,
+    		      ENCHASE_DETAIL,
+    		      BOL_NO,
+    		      SHIP_CONDITION,
+    		      INFO_SOURCE,
+    		      PURCHASE_FLAG,
+    		      ADS_PAGE,
+    		      CASHER_ID,
+    		      SALES_PERSON,
+    		      PROTION_ACTION_CODE,
+    		      COUPON_TOTAL_MONEY,
+    		      MANAGER_CARD_MONEY,
+    		      VOUCHER_TOTAL_MONEY,
+    		      MANAGER_CARD_NO,
+    		      DISTRIBUTE_TYPE,
+    		      CONSUME_TERM,
+    		      HOPE_ARRIVAL_TIME,
+    		      PLAN_OUT_TIME,
+    		      DELIVERY_COMMENTS,
+    		      PROM_TICKET_MONEY,
+    		      PICKUP_SITES_CODE,
+    		      GIFG_NUM,
+    		      IF_PART_SEND,
+    		      BILL_TYPE,
+    		      ORDITM_CLASS,
+    		      ORDER_ITEM_STAUTS,
+    		      ORDER_ITEM_REMARK,
+    		      CREATED_BY,
+    		      CREATED_TIME,
+    		      LAST_UPD_BY,
+    		      LAST_UPD_TIME,
+    		      ACTIVE_FLAG,
+    		      REMARK,
+    		      BIZ_FLOW_CODE,
+    		      DIVISION,
+    		      SUP_RPSTRY_CODE,
+    		      SAP_VOUCHER_NO,
+    		      AGENCY_FLAG,
+    		      PRICE_FILE_NO,
+    		      SUP_PROVIDE_ADDRESS,
+    		      COM_CHARACTER,
+    		      I_UNIK,
+    		      PAY_MODE_NUM,
+    		      INVOICE_PRINT_SHOP,
+    		      DELIVERY_AREA,
+    		      PACKAGE_NO,
+    		      MAINTAIN_FLAG,
+    		      SETMEAL_CODE,
+    		      IF_PART_CANCEL,
+    		      DISTRIBUTE_PROVIDER,
+    		      PAY_TYPE,
+    		      PAY_TERMINAL,
+    		      CASHER_TERMINAL_ID,
+    		      CURRENCY_TYPE,
+    		      POINT_AMOUNT,
+    		      AB_BANK_FLAG,
+    		      SERIAL_NUMBER,
+    		      IMPREFECTION_GRADE,
+    		      C_PROTOTYPE_ID,
+    		      RELATION_ORDER_ITEM_ID,
+    		      INEVITABLE_FLAG,
+    		      RECEIPT_TYPE,
+    		      DELI_SIGNATURE_TYPE,
+    		      AGREEMENT_ID,
+    		      AGREEMENT_TYPE,
+    		      SPECIAL_BUSINESS,
+    		      CMF_ORDER_TYPE,
+    		      CMF_ORDER_NAME,
+    		      POINT_MONEY,
+    		      C_PROTOTYPE_EAN,
+    		      INVOICE_ID,
+    		      B2C_BUSINESS_ORDER AS B_2C_BUSINESS_ORDER ,
+    		      OVER_SALE_QTY,
+    		      DELI_PRIORITY,
+    		      PURCHASE_SEND_STATUS,
+    		      CUSTOM_ORDER_PACKAGE_ID,
+    		      REF_GOODS_CODE,
+    		      SOURCE_SYSTEM,
+    		      IS_INVOICE,
+    		      MUTIPLE_DELI_FLAG,
+    		      SERIAL_NUMBER2 as serial_number_2,
+    		      VIEW_NUMBER1 as view_number_1,
+    		      VIEW_NUMBER2 as view_number_2,
+    		      VIEW_FLAG1 as view_flag_1,
+    		      VIEW_FLAG2 as view_flag_2,
+    		      REAL_SALES_PERSON,
+    		      ENERGY_SAVED_FLAG,
+    		      TOCOUNTRY_FLAG,
+    		      SPECIAL_RETURN_FLAG                  
+    		FROM 	SO_ORDI 
+    		WHERE 	POSORDER_ID =:posNo and store_code = :storeCode and BILL_TYPE =:billType  WITH CS
+    	]]>
+	</sql>
+	
+	<!-- 根据pos单号和门店号码查询订单行 -->
+	<sql id="query_ord_item_id_by_posNo_and_storeCode">
+    	<![CDATA[
+    		SELECT 	ORDER_ITEM_ID  	
+    		FROM 	SO_ORDI 
+    		WHERE 	POSORDER_ID =:posNo and store_code = :storeCode and BILL_TYPE =:billType  and ACTIVE_FLAG=1 WITH CS
+    	]]>
+	</sql>
+	
+	<sql id="query_ordi_by_posNo">
+    	<![CDATA[
+    		SELECT 	
+    		ROW_ID,
+    		      ORDER_ID,
+    		      ORDER_ITEM_ID,
+    		      B2C_ORDER_ID as b_2c_order_id,
+    		      B2CORDER_ITEM_ID as b_2corder_item_id,
+    		      SAP_ORDER_ID,
+    		      ORDER_TYPE,
+    		      POSORDER_ID,
+    		      DIST_CHANNEL,
+    		      STORE_CODE,
+    		      COMMODITY_CODE,
+    		      SAPPRODUCT_CODE,
+    		      COMMODITY_NAME,
+    		      EAN_CODE,
+    		      SUPPLIER_CODE,
+    		      PRODUCT_LEVEL,
+    		      SALE_ORG,
+    		      SALE_NUM,
+    		      SALE_UNIT,
+    		      UNIT_PRICE,
+    		      SAL_ORG_SHOP,
+    		      STOCK_AREA,
+    		      PROVIDE_ADDRESS,
+    		      SERVICE_FEE,
+    		      TRANSPORT_FEE,
+    		      PAY_AMOUNT,
+    		      TOTAL_AMOUNT,
+    		      TASK_FLAG,
+    		      HAS_SERVICE,
+    		      MAINTAIN_NUM,
+    		      ENCHASE_DETAIL,
+    		      BOL_NO,
+    		      SHIP_CONDITION,
+    		      INFO_SOURCE,
+    		      PURCHASE_FLAG,
+    		      ADS_PAGE,
+    		      CASHER_ID,
+    		      SALES_PERSON,
+    		      PROTION_ACTION_CODE,
+    		      COUPON_TOTAL_MONEY,
+    		      MANAGER_CARD_MONEY,
+    		      VOUCHER_TOTAL_MONEY,
+    		      MANAGER_CARD_NO,
+    		      DISTRIBUTE_TYPE,
+    		      CONSUME_TERM,
+    		      HOPE_ARRIVAL_TIME,
+    		      PLAN_OUT_TIME,
+    		      DELIVERY_COMMENTS,
+    		      PROM_TICKET_MONEY,
+    		      PICKUP_SITES_CODE,
+    		      GIFG_NUM,
+    		      IF_PART_SEND,
+    		      BILL_TYPE,
+    		      ORDITM_CLASS,
+    		      ORDER_ITEM_STAUTS,
+    		      ORDER_ITEM_REMARK,
+    		      CREATED_BY,
+    		      CREATED_TIME,
+    		      LAST_UPD_BY,
+    		      LAST_UPD_TIME,
+    		      ACTIVE_FLAG,
+    		      REMARK,
+    		      BIZ_FLOW_CODE,
+    		      DIVISION,
+    		      SUP_RPSTRY_CODE,
+    		      SAP_VOUCHER_NO,
+    		      AGENCY_FLAG,
+    		      PRICE_FILE_NO,
+    		      SUP_PROVIDE_ADDRESS,
+    		      COM_CHARACTER,
+    		      I_UNIK,
+    		      PAY_MODE_NUM,
+    		      INVOICE_PRINT_SHOP,
+    		      DELIVERY_AREA,
+    		      PACKAGE_NO,
+    		      MAINTAIN_FLAG,
+    		      SETMEAL_CODE,
+    		      IF_PART_CANCEL,
+    		      DISTRIBUTE_PROVIDER,
+    		      PAY_TYPE,
+    		      PAY_TERMINAL,
+    		      CASHER_TERMINAL_ID,
+    		      CURRENCY_TYPE,
+    		      POINT_AMOUNT,
+    		      AB_BANK_FLAG,
+    		      SERIAL_NUMBER,
+    		      IMPREFECTION_GRADE,
+    		      C_PROTOTYPE_ID,
+    		      RELATION_ORDER_ITEM_ID,
+    		      INEVITABLE_FLAG,
+    		      RECEIPT_TYPE,
+    		      DELI_SIGNATURE_TYPE,
+    		      AGREEMENT_ID,
+    		      AGREEMENT_TYPE,
+    		      SPECIAL_BUSINESS,
+    		      CMF_ORDER_TYPE,
+    		      CMF_ORDER_NAME,
+    		      POINT_MONEY,
+    		      C_PROTOTYPE_EAN,
+    		      INVOICE_ID,
+    		      B2C_BUSINESS_ORDER AS B_2C_BUSINESS_ORDER ,
+    		      OVER_SALE_QTY,
+    		      DELI_PRIORITY,
+    		      PURCHASE_SEND_STATUS,
+    		      CUSTOM_ORDER_PACKAGE_ID,
+    		      REF_GOODS_CODE,
+    		      SOURCE_SYSTEM,
+    		      IS_INVOICE,
+    		      MUTIPLE_DELI_FLAG,
+    		      SERIAL_NUMBER2 as serial_number_2,
+    		      VIEW_NUMBER1 as view_number_1,
+    		      VIEW_NUMBER2 as view_number_2,
+    		      VIEW_FLAG1 as view_flag_1,
+    		      VIEW_FLAG2 as view_flag_2,
+    		      REAL_SALES_PERSON,
+    		      ENERGY_SAVED_FLAG,
+    		      TOCOUNTRY_FLAG,
+    		      SPECIAL_RETURN_FLAG        
+    		FROM 	SO_ORDI 
+    		WHERE 	POSORDER_ID =:posNo and BILL_TYPE =:billType and ACTIVE_FLAG=:activeFlag  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据sap单号查询订单行信息 -->
+	<sql id="query_orderItem_by_SAPNo">
+    	<![CDATA[
+    	   	SELECT 	
+    	   	ROW_ID,
+    		      ORDER_ID,
+    		      ORDER_ITEM_ID,
+    		      B2C_ORDER_ID as b_2c_order_id,
+    		      B2CORDER_ITEM_ID as b_2corder_item_id,
+    		      SAP_ORDER_ID,
+    		      ORDER_TYPE,
+    		      POSORDER_ID,
+    		      DIST_CHANNEL,
+    		      STORE_CODE,
+    		      COMMODITY_CODE,
+    		      SAPPRODUCT_CODE,
+    		      COMMODITY_NAME,
+    		      EAN_CODE,
+    		      SUPPLIER_CODE,
+    		      PRODUCT_LEVEL,
+    		      SALE_ORG,
+    		      SALE_NUM,
+    		      SALE_UNIT,
+    		      UNIT_PRICE,
+    		      SAL_ORG_SHOP,
+    		      STOCK_AREA,
+    		      PROVIDE_ADDRESS,
+    		      SERVICE_FEE,
+    		      TRANSPORT_FEE,
+    		      PAY_AMOUNT,
+    		      TOTAL_AMOUNT,
+    		      TASK_FLAG,
+    		      HAS_SERVICE,
+    		      MAINTAIN_NUM,
+    		      ENCHASE_DETAIL,
+    		      BOL_NO,
+    		      SHIP_CONDITION,
+    		      INFO_SOURCE,
+    		      PURCHASE_FLAG,
+    		      ADS_PAGE,
+    		      CASHER_ID,
+    		      SALES_PERSON,
+    		      PROTION_ACTION_CODE,
+    		      COUPON_TOTAL_MONEY,
+    		      MANAGER_CARD_MONEY,
+    		      VOUCHER_TOTAL_MONEY,
+    		      MANAGER_CARD_NO,
+    		      DISTRIBUTE_TYPE,
+    		      CONSUME_TERM,
+    		      HOPE_ARRIVAL_TIME,
+    		      PLAN_OUT_TIME,
+    		      DELIVERY_COMMENTS,
+    		      PROM_TICKET_MONEY,
+    		      PICKUP_SITES_CODE,
+    		      GIFG_NUM,
+    		      IF_PART_SEND,
+    		      BILL_TYPE,
+    		      ORDITM_CLASS,
+    		      ORDER_ITEM_STAUTS,
+    		      ORDER_ITEM_REMARK,
+    		      CREATED_BY,
+    		      CREATED_TIME,
+    		      LAST_UPD_BY,
+    		      LAST_UPD_TIME,
+    		      ACTIVE_FLAG,
+    		      REMARK,
+    		      BIZ_FLOW_CODE,
+    		      DIVISION,
+    		      SUP_RPSTRY_CODE,
+    		      SAP_VOUCHER_NO,
+    		      AGENCY_FLAG,
+    		      PRICE_FILE_NO,
+    		      SUP_PROVIDE_ADDRESS,
+    		      COM_CHARACTER,
+    		      I_UNIK,
+    		      PAY_MODE_NUM,
+    		      INVOICE_PRINT_SHOP,
+    		      DELIVERY_AREA,
+    		      PACKAGE_NO,
+    		      MAINTAIN_FLAG,
+    		      SETMEAL_CODE,
+    		      IF_PART_CANCEL,
+    		      DISTRIBUTE_PROVIDER,
+    		      PAY_TYPE,
+    		      PAY_TERMINAL,
+    		      CASHER_TERMINAL_ID,
+    		      CURRENCY_TYPE,
+    		      POINT_AMOUNT,
+    		      AB_BANK_FLAG,
+    		      SERIAL_NUMBER,
+    		      IMPREFECTION_GRADE,
+    		      C_PROTOTYPE_ID,
+    		      RELATION_ORDER_ITEM_ID,
+    		      INEVITABLE_FLAG,
+    		      RECEIPT_TYPE,
+    		      DELI_SIGNATURE_TYPE,
+    		      AGREEMENT_ID,
+    		      AGREEMENT_TYPE,
+    		      SPECIAL_BUSINESS,
+    		      CMF_ORDER_TYPE,
+    		      CMF_ORDER_NAME,
+    		      POINT_MONEY,
+    		      C_PROTOTYPE_EAN,
+    		      INVOICE_ID,
+    		      B2C_BUSINESS_ORDER AS B_2C_BUSINESS_ORDER ,
+    		      OVER_SALE_QTY,
+    		      DELI_PRIORITY,
+    		      PURCHASE_SEND_STATUS,
+    		      CUSTOM_ORDER_PACKAGE_ID,
+    		      REF_GOODS_CODE,
+    		      SOURCE_SYSTEM,
+    		      IS_INVOICE,
+    		      MUTIPLE_DELI_FLAG,
+    		      SERIAL_NUMBER2 as serial_number_2,
+    		      VIEW_NUMBER1 as view_number_1,
+    		      VIEW_NUMBER2 as view_number_2,
+    		      VIEW_FLAG1 as view_flag_1,
+    		      VIEW_FLAG2 as view_flag_2,
+    		      REAL_SALES_PERSON,
+    		      ENERGY_SAVED_FLAG,
+    		      TOCOUNTRY_FLAG,
+    		      SPECIAL_RETURN_FLAG   
+			FROM 	So_ordi
+			WHERE 	bill_type = :billType AND sap_order_id = :sapNo AND active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单行号查询订单行信息 -->
+	<sql id="query_odrerItem_By_orderItemId">
+    	<![CDATA[
+    		SELECT	
+    		ROW_ID,
+    		      ORDER_ID,
+    		      ORDER_ITEM_ID,
+    		      B2C_ORDER_ID as b_2c_order_id,
+    		      B2CORDER_ITEM_ID as b_2corder_item_id,
+    		      SAP_ORDER_ID,
+    		      ORDER_TYPE,
+    		      POSORDER_ID,
+    		      DIST_CHANNEL,
+    		      STORE_CODE,
+    		      COMMODITY_CODE,
+    		      SAPPRODUCT_CODE,
+    		      COMMODITY_NAME,
+    		      EAN_CODE,
+    		      SUPPLIER_CODE,
+    		      PRODUCT_LEVEL,
+    		      SALE_ORG,
+    		      SALE_NUM,
+    		      SALE_UNIT,
+    		      UNIT_PRICE,
+    		      SAL_ORG_SHOP,
+    		      STOCK_AREA,
+    		      PROVIDE_ADDRESS,
+    		      SERVICE_FEE,
+    		      TRANSPORT_FEE,
+    		      PAY_AMOUNT,
+    		      TOTAL_AMOUNT,
+    		      TASK_FLAG,
+    		      HAS_SERVICE,
+    		      MAINTAIN_NUM,
+    		      ENCHASE_DETAIL,
+    		      BOL_NO,
+    		      SHIP_CONDITION,
+    		      INFO_SOURCE,
+    		      PURCHASE_FLAG,
+    		      ADS_PAGE,
+    		      CASHER_ID,
+    		      SALES_PERSON,
+    		      PROTION_ACTION_CODE,
+    		      COUPON_TOTAL_MONEY,
+    		      MANAGER_CARD_MONEY,
+    		      VOUCHER_TOTAL_MONEY,
+    		      MANAGER_CARD_NO,
+    		      DISTRIBUTE_TYPE,
+    		      CONSUME_TERM,
+    		      HOPE_ARRIVAL_TIME,
+    		      PLAN_OUT_TIME,
+    		      DELIVERY_COMMENTS,
+    		      PROM_TICKET_MONEY,
+    		      PICKUP_SITES_CODE,
+    		      GIFG_NUM,
+    		      IF_PART_SEND,
+    		      BILL_TYPE,
+    		      ORDITM_CLASS,
+    		      ORDER_ITEM_STAUTS,
+    		      ORDER_ITEM_REMARK,
+    		      CREATED_BY,
+    		      CREATED_TIME,
+    		      LAST_UPD_BY,
+    		      LAST_UPD_TIME,
+    		      ACTIVE_FLAG,
+    		      REMARK,
+    		      BIZ_FLOW_CODE,
+    		      DIVISION,
+    		      SUP_RPSTRY_CODE,
+    		      SAP_VOUCHER_NO,
+    		      AGENCY_FLAG,
+    		      PRICE_FILE_NO,
+    		      SUP_PROVIDE_ADDRESS,
+    		      COM_CHARACTER,
+    		      I_UNIK,
+    		      PAY_MODE_NUM,
+    		      INVOICE_PRINT_SHOP,
+    		      DELIVERY_AREA,
+    		      PACKAGE_NO,
+    		      MAINTAIN_FLAG,
+    		      SETMEAL_CODE,
+    		      IF_PART_CANCEL,
+    		      DISTRIBUTE_PROVIDER,
+    		      PAY_TYPE,
+    		      PAY_TERMINAL,
+    		      CASHER_TERMINAL_ID,
+    		      CURRENCY_TYPE,
+    		      POINT_AMOUNT,
+    		      AB_BANK_FLAG,
+    		      SERIAL_NUMBER,
+    		      IMPREFECTION_GRADE,
+    		      C_PROTOTYPE_ID,
+    		      RELATION_ORDER_ITEM_ID,
+    		      INEVITABLE_FLAG,
+    		      RECEIPT_TYPE,
+    		      DELI_SIGNATURE_TYPE,
+    		      AGREEMENT_ID,
+    		      AGREEMENT_TYPE,
+    		      SPECIAL_BUSINESS,
+    		      CMF_ORDER_TYPE,
+    		      CMF_ORDER_NAME,
+    		      POINT_MONEY,
+    		      C_PROTOTYPE_EAN,
+    		      INVOICE_ID,
+    		      B2C_BUSINESS_ORDER AS B_2C_BUSINESS_ORDER ,
+    		      OVER_SALE_QTY,
+    		      DELI_PRIORITY,
+    		      PURCHASE_SEND_STATUS,
+    		      CUSTOM_ORDER_PACKAGE_ID,
+    		      REF_GOODS_CODE,
+    		      SOURCE_SYSTEM,
+    		      IS_INVOICE,
+    		      MUTIPLE_DELI_FLAG,
+    		      SERIAL_NUMBER2 as serial_number_2,
+    		      VIEW_NUMBER1 as view_number_1,
+    		      VIEW_NUMBER2 as view_number_2,
+    		      VIEW_FLAG1 as view_flag_1,
+    		      VIEW_FLAG2 as view_flag_2,
+    		      REAL_SALES_PERSON,
+    		      ENERGY_SAVED_FLAG,
+    		      TOCOUNTRY_FLAG,
+    		      SPECIAL_RETURN_FLAG   
+    		FROM 	So_ordi
+    		WHERE 	order_item_id = :orderItemId AND bill_type = :billType AND active_flag = :activeFlag
+    		FOR READ ONLY  WITH CS 
+    	]]>
+	</sql>
+	
+			<!-- 根据订单行号查询订单行信息 -->
+	<sql id="query_orderItem_By_orderItemId_activeFlag0">
+    	<![CDATA[
+    		SELECT	 
+    		ROW_ID,
+    		      ORDER_ID,
+    		      ORDER_ITEM_ID,
+    		      B2C_ORDER_ID as b_2c_order_id,
+    		      B2CORDER_ITEM_ID as b_2corder_item_id,
+    		      SAP_ORDER_ID,
+    		      ORDER_TYPE,
+    		      POSORDER_ID,
+    		      DIST_CHANNEL,
+    		      STORE_CODE,
+    		      COMMODITY_CODE,
+    		      SAPPRODUCT_CODE,
+    		      COMMODITY_NAME,
+    		      EAN_CODE,
+    		      SUPPLIER_CODE,
+    		      PRODUCT_LEVEL,
+    		      SALE_ORG,
+    		      SALE_NUM,
+    		      SALE_UNIT,
+    		      UNIT_PRICE,
+    		      SAL_ORG_SHOP,
+    		      STOCK_AREA,
+    		      PROVIDE_ADDRESS,
+    		      SERVICE_FEE,
+    		      TRANSPORT_FEE,
+    		      PAY_AMOUNT,
+    		      TOTAL_AMOUNT,
+    		      TASK_FLAG,
+    		      HAS_SERVICE,
+    		      MAINTAIN_NUM,
+    		      ENCHASE_DETAIL,
+    		      BOL_NO,
+    		      SHIP_CONDITION,
+    		      INFO_SOURCE,
+    		      PURCHASE_FLAG,
+    		      ADS_PAGE,
+    		      CASHER_ID,
+    		      SALES_PERSON,
+    		      PROTION_ACTION_CODE,
+    		      COUPON_TOTAL_MONEY,
+    		      MANAGER_CARD_MONEY,
+    		      VOUCHER_TOTAL_MONEY,
+    		      MANAGER_CARD_NO,
+    		      DISTRIBUTE_TYPE,
+    		      CONSUME_TERM,
+    		      HOPE_ARRIVAL_TIME,
+    		      PLAN_OUT_TIME,
+    		      DELIVERY_COMMENTS,
+    		      PROM_TICKET_MONEY,
+    		      PICKUP_SITES_CODE,
+    		      GIFG_NUM,
+    		      IF_PART_SEND,
+    		      BILL_TYPE,
+    		      ORDITM_CLASS,
+    		      ORDER_ITEM_STAUTS,
+    		      ORDER_ITEM_REMARK,
+    		      CREATED_BY,
+    		      CREATED_TIME,
+    		      LAST_UPD_BY,
+    		      LAST_UPD_TIME,
+    		      ACTIVE_FLAG,
+    		      REMARK,
+    		      BIZ_FLOW_CODE,
+    		      DIVISION,
+    		      SUP_RPSTRY_CODE,
+    		      SAP_VOUCHER_NO,
+    		      AGENCY_FLAG,
+    		      PRICE_FILE_NO,
+    		      SUP_PROVIDE_ADDRESS,
+    		      COM_CHARACTER,
+    		      I_UNIK,
+    		      PAY_MODE_NUM,
+    		      INVOICE_PRINT_SHOP,
+    		      DELIVERY_AREA,
+    		      PACKAGE_NO,
+    		      MAINTAIN_FLAG,
+    		      SETMEAL_CODE,
+    		      IF_PART_CANCEL,
+    		      DISTRIBUTE_PROVIDER,
+    		      PAY_TYPE,
+    		      PAY_TERMINAL,
+    		      CASHER_TERMINAL_ID,
+    		      CURRENCY_TYPE,
+    		      POINT_AMOUNT,
+    		      AB_BANK_FLAG,
+    		      SERIAL_NUMBER,
+    		      IMPREFECTION_GRADE,
+    		      C_PROTOTYPE_ID,
+    		      RELATION_ORDER_ITEM_ID,
+    		      INEVITABLE_FLAG,
+    		      RECEIPT_TYPE,
+    		      DELI_SIGNATURE_TYPE,
+    		      AGREEMENT_ID,
+    		      AGREEMENT_TYPE,
+    		      SPECIAL_BUSINESS,
+    		      CMF_ORDER_TYPE,
+    		      CMF_ORDER_NAME,
+    		      POINT_MONEY,
+    		      C_PROTOTYPE_EAN,
+    		      INVOICE_ID,
+    		      B2C_BUSINESS_ORDER AS B_2C_BUSINESS_ORDER ,
+    		      OVER_SALE_QTY,
+    		      DELI_PRIORITY,
+    		      PURCHASE_SEND_STATUS,
+    		      CUSTOM_ORDER_PACKAGE_ID,
+    		      REF_GOODS_CODE,
+    		      SOURCE_SYSTEM,
+    		      IS_INVOICE,
+    		      MUTIPLE_DELI_FLAG,
+    		      SERIAL_NUMBER2 as serial_number_2,
+    		      VIEW_NUMBER1 as view_number_1,
+    		      VIEW_NUMBER2 as view_number_2,
+    		      VIEW_FLAG1 as view_flag_1,
+    		      VIEW_FLAG2 as view_flag_2,
+    		      REAL_SALES_PERSON,
+    		      ENERGY_SAVED_FLAG,
+    		      TOCOUNTRY_FLAG,
+    		      SPECIAL_RETURN_FLAG   
+    		FROM 	So_ordi
+    		WHERE 	order_item_id = :orderItemId AND active_flag = 0
+    		FOR READ ONLY  WITH CS 
+    	]]>
+	</sql>
+	
+	<!-- 根据b2c订单行号查询订单行信息 -->
+	<sql id="isOrdiExistsByB2COrderItemId">
+    	<![CDATA[
+    		SELECT 	1
+    		FROM 	SO_ORDI  
+    		WHERE 	B2CORDER_ITEM_ID = :b2cOrderItemId fetch first 1 row only  WITH CS
+    	]]>
+	</sql>
+	<!-- 查询延保商品关联实体商品的OMS订单行号 -->
+	<sql id="queryOrderItemIdByPosOrderId">
+    	<![CDATA[
+    	    	SELECT 	order_item_id 
+    	    	FROM 	So_ordi 
+    	    	WHERE 	posorder_id=:posOrderId  WITH CS
+    	]]>
+	</sql>
+	<!-- 查询延保商品关联实体商品的OMS订单号 -->
+	<sql id="queryOrderIdByPosOrderId">
+    	<![CDATA[
+    	    	SELECT order_id FROM So_ordi WHERE posorder_id=:posOrderId  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单行号查询订单返券积分信息 -->
+	<sql id="query_ordiRewordPoints_By_orderItemId">
+    	<![CDATA[
+    		SELECT 	Op.order_item_id, Op.limit_type, Op.fina_sup_code,
+			       	Op.reward_point, Op.mem_out_card_no, Op.mem_in_card_no,
+			       	Op.product_brand, Op.sale_org, Op.deal_date,
+			       	Op.active_flag, Op.bill_type
+    		FROM 	So_ordi_reward_points as Op
+    		WHERE 	Op.order_item_id = :orderItemId AND Op.bill_type = :billType AND Op.active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单行号、会员内卡号、额度类型查询返积分表中此信息条数 -->
+	<sql id="query_hasPointInOrdiReward">
+    	<![CDATA[
+    	SELECT  count(1) as count
+    	FROM 	So_ordi_reward_points as O
+    	WHERE 	O.order_item_id = :orderItemId AND O.mem_in_card_no = :memInCard AND O.limit_type = :type AND O.bill_type = :billType AND O.active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单行号查询返积分表中此信息条数 -->
+	<sql id="query_hasPointInOrdiRewardbyItemId">
+    	<![CDATA[
+    	SELECT  count(1) as count
+    	FROM 	so_ordi_reward_points as O
+    	WHERE 	O.order_item_id = :orderItemId AND O.bill_type = :billType AND O.active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单行号查询订单返积分信息 -->
+	<sql id="query_RewordPoints_By_orderItemId">
+    	<![CDATA[
+    		SELECT 	Op.order_item_id, Op.limit_type, Op.fina_sup_code,
+			       	Op.reward_point, Op.mem_out_card_no, Op.mem_in_card_no,
+			       	Op.product_brand, Op.sale_org, Op.deal_date,
+			       	Op.active_flag, Op.bill_type,Op.account_type,Op.eff_date,Op.end_date
+    		FROM 	SO_ORDI_REWARD_POINTS as Op 
+    		WHERE 	Op.order_item_id = :orderItemId AND Op.bill_type = :billType AND Op.active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单号、券类型、券号查询返券表中此信息条数 -->
+	<sql id="query_hasPromoInOrdReward">
+    	<![CDATA[
+    	SELECT  count(1) as count
+    	FROM 	so_ordi_reward_promo as O
+    	WHERE 	O.order_item_id = :orderItemId AND O.bill_type = :billType AND O.active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+	<sql id="query_ordiRewardPromoByOrderItemId">
+    	<![CDATA[
+    	SELECT row_id,order_item_id,share_limit,ticket_id,bill_type,sale_org,sale_date,prom_ticket_type,
+    	created_by,last_upd_by,last_upd_time,created_time,active_flag,remark,account_type,eff_date,end_date,provide_id
+    	FROM 	SO_ORDI_REWARD_PROMO
+    	WHERE 	order_item_id = :orderItemId AND bill_type = :billType AND active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单行号查询订单行支付信息 -->
+	<sql id="query_ordiPay_By_orderItemId">
+    	<![CDATA[
+    		SELECT 	O.row_id, O.order_id, O.order_item_id, O.pay_type,
+					O.parent_pay_code, O.pay_code, O.pay_name, O.pay_amount,
+			       	O.bank_type_code, O.card_no, O.pay_time, O.sale_org,
+			       	O.bill_type, O.policy_flag, O.model_name, O.created_by,
+			       	O.created_time, O.last_upd_by, O.last_upd_time, O.active_flag,
+			       	O.remark, O.bank_type_name ,O.pay_id,O.casher_id
+    		FROM 	So_ordi_pay as O 
+    		WHERE 	O.order_item_id = :orderItemId AND O.bill_type = :billType AND O.active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单行号，支付单号查询订单支付信息 -->
+	<sql id="query_ordiPay_byPayId">
+    	<![CDATA[
+			SELECT
+			    ordiPay.row_id,
+			    ordiPay.order_id,
+			    ordiPay.order_item_id,
+			    ordiPay.pay_type,
+			    ordiPay.parent_pay_code,
+			    ordiPay.pay_code,
+			    ordiPay.pay_name,
+			    ordiPay.pay_amount,
+			    ordiPay.bank_type_code,
+			    ordiPay.card_no,
+			    ordiPay.pay_time,
+			    ordiPay.sale_org,
+			    ordiPay.bill_type,
+			    ordiPay.policy_flag,
+			    ordiPay.model_name,
+			    ordiPay.created_by,
+			    ordiPay.created_time,
+			    ordiPay.last_upd_by,
+			    ordiPay.last_upd_time,
+			    ordiPay.active_flag,
+			    ordiPay.remark,
+			    ordiPay.bank_type_name
+			FROM
+			    So_ordi_pay AS ordiPay
+			WHERE
+			    ordiPay.order_item_id =:orderItemId
+			AND ordiPay.pay_id =:payId 
+			AND ordiPay.active_flag = 1 WITH CS
+    	]]>
+	</sql>
+	<!-- 根据omsId查询 SO_ORDI_PAY表中的内容 -->
+	<sql id="queryOrdiPaysByOrderId">
+    	<![CDATA[
+   	    	SELECT order_id, order_item_id, pay_type, parent_pay_code, pay_code, pay_name, pay_amount, 
+    	    	bank_type_code, card_no, pay_time, sale_org, bill_type, policy_flag, model_name, 
+    	    	created_by, created_time, last_upd_by, last_upd_time, active_flag, remark,pay_id,casher_id
+   	    	FROM So_ordi_pay WHERE order_id = :omsId  WITH CS
+    	]]>
+	</sql>
+
+	<!-- 根据订单行号查询订单使用电子券信息 -->
+	<sql id="query_ordiProm_By_orderItemId">
+    	<![CDATA[
+    		SELECT 	Op.row_id, Op.order_id, Op.order_item_id, Op.promotion_code,
+      		 		Op.promotion_type, Op.use_amount, Op.bill_type, Op.created_by,
+       				Op.last_upd_by, Op.last_upd_time, Op.created_time, Op.active_flag,
+       				Op.remark
+    		FROM 	So_ordi_prom as Op 
+    		WHERE 	Op.order_item_id = :orderItemId AND Op.bill_type = :billType AND Op.promotion_type = :couponType AND Op.active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+	<sql id="query_ordiProm_By_orderItemId2">
+    	<![CDATA[
+    		SELECT 	Op.row_id, Op.order_id, Op.order_item_id, Op.promotion_code,
+      		 		Op.promotion_type, Op.use_amount, Op.bill_type, Op.created_by,
+       				Op.last_upd_by, Op.last_upd_time, Op.created_time, Op.active_flag,
+       				Op.remark
+    		FROM 	So_ordi_prom as Op 
+    		WHERE 	Op.order_item_id = :orderItemId AND Op.bill_type = :billType AND Op.active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+
+	<!-- 根据sap单号查询订单行状态信息 -->
+	<sql id="query_odriStatus_By_SAPNo">
+    	<![CDATA[
+    		SELECT 	So.order_id, So.order_item_id, So.status_code, So.status_type,
+       			 	So.bill_type, So.sys_status_code, So.active_flag
+    		FROM 	So_st_ordi_status AS So,So_ordi AS Si 
+    		WHERE 	Si.order_item_id = So.order_item_id AND So.status_type = :statusType AND So.status_code = :statusCode AND Si.sap_order_id = :sapNo AND So.active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单行号查询异常信息订单行 rowId -->
+	<sql id="query_stOrdiAbnRowId_by_orderItemId">
+    	<![CDATA[
+    	SELECT 	Oa.row_id
+    	FROM 	So_st_ordi_abn AS Oa 
+    	WHERE 	Oa.order_item_id = :orderItemId 
+    	AND Oa.active_flag = :activeFlag 
+    	AND Oa.bill_type = :billType 
+    	AND Oa.orderi_abn_code = :orderiAbnCode  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据副订单行号和关联类型查询订单关联关系 -->
+	<sql id="query_ordRelationships_by_orderItemId_and_type">
+    	<![CDATA[
+    		SELECT 	Or.row_id, Or.order_item_id, Or.relation_type,
+			       	Or.control_flag, Or.relation_item, Or.created_by,
+			       	Or.created_time, Or.last_upd_by, Or.last_upd_time,
+			       	Or.active_flag, Or.remark, Or.bill_type
+    		FROM 	So_ord_relationship as Or 
+    		WHERE 	Or.relation_item = :orderItemId AND Or.relation_type = :relationType  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据主订单行号查询关联关系 -->
+	<sql id="query_ordRelationships_by_orderItemId">
+    	<![CDATA[
+    	SELECT 	Or.row_id, Or.order_item_id, Or.relation_type,
+			       	Or.control_flag, Or.relation_item, Or.created_by,
+			       	Or.created_time, Or.last_upd_by, Or.last_upd_time,
+			       	Or.active_flag, Or.remark, Or.bill_type, Or.identi_flag 
+		FROM 	So_ord_relationship as Or 
+		WHERE 	Or.order_item_id = :orderItemId    WITH CS  
+    	]]>
+	</sql>
+
+	<!-- 根据副订单行号查询关联关系 -->
+	<sql id="query_ordRelationship_by_orderItemId">
+    	<![CDATA[
+    		SELECT 	Or.row_id, Or.order_item_id, Or.relation_type,
+			       	Or.control_flag, Or.relation_item, Or.created_by,
+			       	Or.created_time, Or.last_upd_by, Or.last_upd_time,
+			       	Or.active_flag, Or.remark, Or.bill_type, Or.identi_flag 
+    		FROM 	So_ord_relationship as Or 
+    		WHERE 	Or.relation_item = :orderItemId  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据b2c订单行号查询订单行信息 -->
+	<sql id="isOrdiVisualExists">
+    	<![CDATA[
+    		SELECT 	1
+    		FROM 	SO_ORDI_VISUAL  
+    		WHERE 	B2CORDER_ITEM_ID = :b2cOrderItemId  fetch first 1 row only   WITH CS     
+    	]]>
+	</sql>
+	<!-- 根据B2C订单行号查询OMS订单行号 -->
+	<sql id="queryOrderItemIdByB2COrderItemIdFromOrdiVisual">
+    	<![CDATA[
+    	    	SELECT order_item_id FROM So_ordi_visual WHERE b2corder_item_id =:b2cOrderItemId  WITH CS
+    	]]>
+	</sql>
+	<!-- 查询虚拟商品订单行是否存在 -->
+	<sql id="query_orderItemVisual_exist">
+    	<![CDATA[
+    	    	SELECT count(1) 
+    	    	FROM 	So_ordi_visual 
+    	    	WHERE 	order_item_id =:omsOrderItemId 
+    	    	AND 	bill_type =:billType
+    	    	FOR READ ONLY  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单行号查询虚拟订单行信息 -->
+	<sql id="query_OrdiVisual_By_orderItemId">
+    	<![CDATA[	
+			SELECT
+			    row_id,
+			    order_id,
+			    order_item_id,
+			    sap_certificate_id,
+			    sale_org,
+			    sale_unit,
+			    sale_num,
+			    unit_price,
+			    sale_amount,
+			    pay_amount,
+			    invoice_print_count,
+			    order_item_status,
+			    orditm_class,
+			    bill_type,
+			    posorder_id,
+			    biz_flow_code,
+			    created_by,
+			    last_upd_by,
+			    last_upd_time,
+			    created_time,
+			    active_flag,
+			    remark,
+			    b2c_order_id as b_2c_order_id,
+			    b2corder_item_id as b_2corder_item_id,
+			    gift_card_category,
+			    gift_card_type
+			FROM
+			    so_ordi_visual
+			WHERE 	order_item_id = :orderItemId AND bill_type = :billType AND active_flag = :activeFlag  WITH CS
+	]]>
+	</sql>
+	<!-- 根据订单行号查询订单优惠单信息 -->
+	<sql id="query_OrdiVoucher_By_orderItemId">
+    	<![CDATA[
+    		SELECT s.row_id as rowid, s.order_id as orderid, s.order_item_id as orderitemid, 
+   				s.commodity_code as commoditycode,
+				s.voucher_channel as voucherchannel, s.supplier_code as suppliercode, s.voucher_type as vouchertype,
+				s.use_amount as useamount, s.voucher_fee as voucherfee, s.charge_way as chargeway, 
+				s.bill_type as billtype, s.voucher_scan_num as voucherscannum,  
+				s.created_by as createdby, s.created_time as createdtime, s.last_upd_by as lastupdby,
+				s.last_upd_time as lastupdtime, s.active_flag as activeflag, s.remark as remark, s.voucher_number as vouchernumber 
+			FROM so_ordi_voucher s
+			WHERE s.order_item_id = :orderItemId  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单行号查询服务商品信息 -->
+	<sql id="query_ordiSrv_By_orderItemId">
+    	<![CDATA[
+	    	SELECT 	Sv.row_id, Sv.order_item_id, Sv.out_order_item_id, Sv.srv_commodity_code,
+			       	Sv.srv_commodity_name, Sv.ean_code, Sv.srv_commodity_num, Sv.service_remark,
+			       	Sv.srv_flag, Sv.srv_provider, Sv.if_part_install, Sv.if_trestle,
+			       	Sv.srv_time, Sv.city_code, Sv.area_code, Sv.address,
+			       	Sv.bill_type, Sv.created_by, Sv.created_time, Sv.last_upd_by,
+			       	Sv.last_upd_time, Sv.active_flag, Sv.remark
+	    	FROM 	So_ordi_srv as Sv 
+	    	WHERE 	Sv.order_item_id = :orderItemId and Sv.bill_type = :billType and Sv.active_flag = :activeFlag  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据订单行号查询赠品信息 -->
+	<sql id="query_ordiGiftgood_by_orderItemId">
+    	<![CDATA[
+    	SELECT 	Og.row_id, Og.order_item_id, Og.order_id, Og.gift_ord_item_id,
+		       	Og.gift_type, Og.promotion_gift_discount, Og.bill_type, Og.amount,
+		       	Og.gift_amount, Og.created_by, Og.created_time, Og.last_upd_by,
+		       	Og.last_upd_time, Og.active_flag, Og.remark 
+    	FROM 	SO_ORDI_GIFTGOOD AS Og 
+    	WHERE 	Og.order_item_id = :orderItemId AND Og.bill_type = :billType  WITH CS
+    	]]>
+	</sql>
+	<!-- 根据OMS订单行号查询最新的一条处理状态的日志编号 -->
+	<sql id="query_LatestCOrdiStatusLog_by_orderItemId">
+    	<![CDATA[
+    		select ROW_ID, LOG_ID, ORDER_ITEM_ID, RETURN_TYPE, PROCESS_CODE, PROCESS_NAME, OPERATE_TYPE, 
+    		COUNTDOWM_TIME, RETURN_ADDRESS, CONSIGNEE, PHONE_NUM, ZIP_CODE, TRANSPORT_FEE, EXPRESS_CODE, 
+    		EXPRESS_COMPANY_CODE, EXPRESS_COMPANY, CUSTOMER_SERVICE_ORDER, REASON_DES, OPERATE_TIME, MEMO, 
+    		SOURCE_SYS, CREATED_BY, LAST_UPD_BY, LAST_UPD_TIME, CREATED_TIME, ACTIVE_FLAG, REMARK, BILL_TYPE
+            from so_c_ordi_status_log
+            where active_flag = :activeFlag  and order_item_id = :orderItemId 
+            order by created_time desc 
+            fetch first 1 row only   WITH CS   
+    	]]>
+	</sql>
+	<!-- 接口：I-OMS-EPP-002 确认收货下传EPP，根据OMS订单行号查询B2C订单号、B2C交易单、OMS订单行号、金额 -->
+	<sql id="query_ordi_by_orderItemId_for_oms2epp">
+    	<![CDATA[
+    		select B2C_ORDER_ID as B_2C_ORDER_ID,B2C_BUSINESS_ORDER AS B_2C_BUSINESS_ORDER,ORDER_ITEM_ID,PAY_AMOUNT
+            from SO_ORDI where ORDER_ITEM_ID= :orderItemId and bill_type = :billType
+            fetch first 1 row only  WITH CS  
+    	]]>
+	</sql>
+	<!-- C店需求中，用于获取序列号作为订单行操作状态日志表中的log_id字段的值 -->
+	<sql id="get_cOrdiStatusLog_logId_sequence">
+    	<![CDATA[
+    	    select next value for OMS_LOGID_SEQ from sysibm.sysdummy1  WITH CS
+    	]]>
+	</sql>
+
+	<!-- C店需求，根据orderItemId来查询客户收货或者系统收货的操作时间，只查操作时间的字段 -->
+	<sql id="queryOperateTimeByOrderItemId">
+    	<![CDATA[
+    		select to_char (operate_time,'yyyy-mm-dd hh24:mi:ss') as operateTime
+            from so_c_ordi_status_log where ORDER_ITEM_ID= :orderItemId and bill_type = :billType and (PROCESS_CODE =:customerReceive or PROCESS_CODE =:systemReceive)
+            order by created_time desc fetch first 1 row only  WITH CS    
+    	]]>
+	</sql>
+	<!-- 根据OMS订单行号和状态编码查询最新的一条处理状态 -->
+	<sql id="query_LatestCOrdiStatusLog_by_orderItemIdAndProcessCode">
+    	<![CDATA[
+    		SELECT row_id, log_id, order_item_id, return_type, process_code, process_name, operate_type, 
+    		countdowm_time, return_address, consignee, phone_num, zip_code, transport_fee, express_code, 
+    		express_company_code, express_company, customer_service_order, reason_des, operate_time, memo, 
+    		source_sys, created_by, last_upd_by, last_upd_time, created_time, active_flag, remark, bill_type
+            FROM So_c_ordi_status_log
+            WHERE active_flag = :activeFlag  AND order_item_id = :orderItemId AND process_code = :statuCode
+            ORDER BY created_time DESC 
+            FETCH FIRST 1 ROW ONLY     WITH CS  
+    	]]>
+	</sql>
+
+	<!-- 接口：I-OMS-XXX-001 订单状态分发，根据OMS订单行号查询B2CORDER_ITEM_ID、POSORDER_ID -->
+	<sql id="query_ordi_by_orderItemId_for_oms2all001">
+    	<![CDATA[
+    		select B2CORDER_ITEM_ID AS b_2corder_item_id,POSORDER_ID,ORDER_TYPE
+            from SO_ORDI where ORDER_ITEM_ID= :orderItemId and bill_type = :billType
+            fetch first 1 row only  WITH CS   
+    	]]>
+	</sql>
+
+	<!-- 根据OMS订单行号查询处理状态日志表 -->
+	<sql id="query_process_status_log_by_orderItemId">
+    	<![CDATA[
+    	    select ROW_ID, LOG_ID, ORDER_ITEM_ID, RETURN_TYPE, PROCESS_CODE, PROCESS_NAME, OPERATE_TYPE, 
+    		COUNTDOWM_TIME, RETURN_ADDRESS, CONSIGNEE, PHONE_NUM, ZIP_CODE, TRANSPORT_FEE, EXPRESS_CODE, 
+    		EXPRESS_COMPANY_CODE, EXPRESS_COMPANY, CUSTOMER_SERVICE_ORDER, REASON_DES, OPERATE_TIME, MEMO, 
+    		SOURCE_SYS, CREATED_BY, LAST_UPD_BY, LAST_UPD_TIME, CREATED_TIME, ACTIVE_FLAG, REMARK, BILL_TYPE
+            from so_c_ordi_status_log
+            where active_flag = :activeFlag and order_item_id = :orderItemId  WITH CS
+    	]]>
+	</sql>
+
+	<!-- 根据OMS订单行号查询物流配送信息 -->
+	<sql id="query_ordi_delivery_By_orderItemId">
+    	<![CDATA[
+    		SELECT	ROW_ID, ORDER_ID, ORDER_ITEM_ID, DELI_NUMBER, DELI_TYPE, DELI_ORDERID, OPERATOR, DELI_STATUS,
+			DELI_NUM, DELI_UNIT, SHIP_CONDITION, BILL_TYPE, EST_TIME, CREATED_BY, CREATED_TIME, LAST_UPD_BY,
+			LAST_UPD_TIME, ACTIVE_FLAG, REMARK
+    		FROM 	So_ordi_delivery
+    		WHERE 	order_item_id = :orderItemId AND bill_type = :billType AND active_flag = :activeFlag
+    		FOR READ ONLY  WITH CS 
+    	]]>
+	</sql>
+	<!-- 根据日期查询7天前创建的需要取消的对公订单信息 -->
+	<sql id="queryCancelCompanyJobOrdi">
+		<![CDATA[
+			SELECT ordi.ORDER_ITEM_ID, ordi.ORDITM_CLASS, ordi.AB_BANK_FLAG, ordi.DISTRIBUTE_TYPE, ordi.ORDER_TYPE,
+				ordi.POSORDER_ID, ordi.STORE_CODE, ordi.ORDER_ID, ordi.STOCK_AREA, ordi.COMMODITY_CODE, ordi.B2CORDER_ITEM_ID,
+				ordi.SUPPLIER_CODE, ordi.SALE_NUM, ordi.PURCHASE_FLAG, ordi.SOURCE_SYSTEM, ordi.DIST_CHANNEL	, ordi.REMARK
+    		FROM	So_ordi ordi, SO_ST_ORDI_STATUS ordiStatu
+    		WHERE	 ordi.order_item_id = ordiStatu.order_item_id AND ordi.active_flag = 1  AND ordi.dist_channel = '30'
+    			AND ordi.MUTIPLE_DELI_FLAG = 'D3' AND ordiStatu.status_type = 'IS' AND ordiStatu.status_code >= '20' 
+    			AND ordiStatu.status_code <= '60' AND ordi.created_time <= :sevenDayBefore
+    			FETCH FIRST ${count}  ROWS ONLY WITH CS
+		]]>
+	</sql>
+
+	<!-- 更新订单行还款方式 -->
+	<sql id="update_ordi_paytype">
+    	<![CDATA[
+    	UPDATE	So_ordi AS oi
+    	SET     oi.pay_type = :payType, oi.last_upd_time = current timestamp, oi.last_upd_by = 'POS'
+    	WHERE 	oi.order_item_id = :orderItemId
+    	]]>
+	</sql>
+	<!-- 线下订单支付时更新订单行收银员、装运条件等信息 -->
+	<sql id="updateOrdi">
+    	<![CDATA[
+    	UPDATE	So_ordi
+    	SET  casher_id = :casherId,casher_terminal_id=:casherTerminalId,
+    	<#if shipCondition?exists && shipCondition!=""> ship_condition=:shipCondition, </#if>
+    	<#if relationOrderItemId?exists && relationOrderItemId!=""> relation_order_item_id=:relationOrderItemId, </#if>
+    	last_upd_time = current timestamp, last_upd_by = 'POS'
+    	WHERE order_item_id = :orderItemId
+    	]]>
+	</sql>
+	<!--C店订单调库存后返回超卖数量，保存到订单行表中 -->
+	<sql id="updateOrdiOverSaleQty">
+    	<![CDATA[
+    	UPDATE	So_ordi
+    	SET  over_sale_qty = :overSaleQty,
+    	last_upd_time = current timestamp, last_upd_by = 'OMS'
+    	WHERE order_item_id = :orderItemId AND active_flag = 1
+    	]]>
+	</sql>
+	<!-- 两步式订单支付完成后，更新订单行创建时间，并把该时间传输给pos和sap，退货时需要把该时间传给POS -->
+	<sql id="updateOrdiCreateTime">
+    	<![CDATA[
+    		UPDATE	So_ordi 
+    		SET		created_time = :createTime , last_upd_time = CURRENT TIMESTAMP, last_upd_by = 'OMS'
+    		WHERE	order_item_id IN(${inSQL}) AND active_flag = 1  
+    	]]>
+	</sql>
+	<!-- 更新订单行券总额 -->
+	<sql id="update_promTicketMoney_by_orderItemId">
+    	<![CDATA[
+    	UPDATE So_ordi AS Oi set Oi.prom_ticket_money = :ticketMoney ,Oi.last_upd_time=current timestamp WHERE Oi.order_item_id = :orderItemId AND bill_type = :billType
+    	]]>
+	</sql>
+	<!-- 更新订单行sap单号和sap财务凭证 -->
+	<sql id="update_sapNo_by_orderItemId">
+    	<![CDATA[
+    	UPDATE So_ordi AS Oi set Oi.sap_order_id = :sapNo,Oi.sap_voucher_no = :sapVoucherNo 
+    	<#if posNo?exists>
+    	,Oi.posorder_id = :posNo
+    	</#if>
+    	,Oi.last_upd_time=:lastUpdTime WHERE Oi.order_item_id = :orderItemId AND Oi.bill_type = :billType
+    	]]>
+	</sql>
+	<!-- 更新订单pos单号 -->
+	<sql id="update_posNo_by_orderItemId">
+    	<![CDATA[
+    	UPDATE So_ordi AS Oi set Oi.posorder_id = :posNo,Oi.last_upd_time=:lastUpdTime WHERE Oi.order_item_id = :orderItemId AND Oi.bill_type = :billType
+    	]]>
+	</sql>
+	<!-- 根据订单行号更新订单行sap单号和pos单号 -->
+	<sql id="update_ordI_By_orderItemId">
+    	<![CDATA[
+    		UPDATE 	So_ordi AS Oi SET Oi.sap_order_id = :sapOrderId ,Oi.last_upd_time = current timestamp ,Oi.last_upd_by = 'OMS'
+    		<#if posOrderId?exists && posOrderId!=""> ,Oi.posorder_id = :posOrderId  </#if>
+    		WHERE 	Oi.order_item_id = :orderItemId and Oi.bill_type = :billType
+    	]]>
+	</sql>
+	
+	<!-- 根据订单行号更新订单行sap单号和pos单号 -->
+	<sql id="update_b2cId_By_orderItemId">
+    	<![CDATA[
+    		UPDATE 	So_ordi AS Oi SET Oi.B2CORDER_ITEM_ID = :b2cOrderId ,Oi.last_upd_time = current timestamp ,Oi.last_upd_by = 'OMS'
+    		WHERE 	Oi.order_item_id = :orderItemId and Oi.bill_type = :billType
+    	]]>
+	</sql>
+	<!-- 更新订单行表SO_ORDI中，销售组织SALE_ORG和门店代码SOTRE_CODE -->
+	<sql id="update_repayInfo_ordi">
+    	<![CDATA[
+    	    UPDATE 	So_ordi 
+    	    SET 	sale_org = :saleOrg , store_code = :storeCode , last_upd_time = :lastUpdTime , last_upd_by = 'POS'
+    	    WHERE 	order_item_id = :orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi">
+    	<![CDATA[
+			update SO_ORDI set active_flag=0, last_upd_by='OMS',Last_upd_time=current timestamp where order_item_id =:orderItemId
+	    ]]>
+	</sql>
+	<!-- SAP单号写入订单行 -->
+	<sql id="updateSapOrderIdFromOrdi">
+    	<![CDATA[
+    	    	UPDATE So_ordi s SET s.sap_order_id =:sapOrderId,
+    	    	s.last_upd_time = CURRENT TIMESTAMP, s.last_upd_by = 'OMS' WHERE s.order_item_id =:omsOrderItemId
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除返积分信息 -->
+	<sql id="delete_ordiRewardPoint_By_orderItemId">
+    	<![CDATA[
+    		UPDATE so_ordi_reward_points AS O 
+    		SET O.active_flag=:activeFlag, O.last_upd_time = current timestamp
+    	    WHERE O.order_item_id = :orderItemId AND O.bill_type = :billType
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_reward_points">
+    	<![CDATA[
+    	    update SO_ORDI_REWARD_POINTS set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 根据posPayId在SO_ORDI_REWARD_POINTS表中设置相应记录ACTIVE_FLAG字段值为0 -->
+	<sql id="deleteInPoints">
+    	<![CDATA[
+    	   update SO_ORDI_REWARD_POINTS  SET ACTIVE_FLAG=:activeFlag 
+    	   where PROVIDE_ID=:posPayId AND ORDER_ITEM_ID = :orderItemId AND bill_type = :billType
+    	]]>
+	</sql>
+	<!-- 根据posPayId在SO_ORDI_REWARD_PROMO表中设置相应记录ACTIVE_FLAG字段值为0 -->
+	<sql id="deleteInPromo">
+    	<![CDATA[
+    	   update SO_ORDI_REWARD_PROMO  SET ACTIVE_FLAG=:activeFlag 
+    	   where PROVIDE_ID=:posPayId AND ORDER_ITEM_ID = :orderItemId AND bill_type = :billType
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除订单返券信息 -->
+	<sql id="delete_ordiRewardPromo_By_orderItemId">
+    	<![CDATA[
+    		UPDATE so_ordi_reward_promo AS O 
+    		SET O.active_flag=:activeFlag ,O.last_upd_time = current timestamp
+    	    WHERE O.order_item_id = :orderItemId AND O.bill_type = :billType
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_prom">
+    	<![CDATA[
+			update SO_ORDI_PROM set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ord_relationship">
+    	<![CDATA[
+			update SO_ORD_RELATIONSHIP set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 根据订单行号更新欠款表 -->
+	<sql id="update_overdraft_by_orderItemId">
+    	<![CDATA[
+    		UPDATE 	So_overdraft as So set So.sap_order_id = :sapOrderId ,So.last_upd_time = current timestamp
+    		WHERE 	So.order_item_id = :orderItemId and So.bill_type = :billType
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_overdraft">
+    	<![CDATA[
+			update SO_OVERDRAFT set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 根据rowId更新异常订单行信息为失效 -->
+	<sql id="update_stOrdiAbn_by_orderItemId">
+    	<![CDATA[
+    	UPDATE	So_st_ordi_abn AS Oa
+    	SET Oa.active_flag = :activeFlag, Oa.abn_resolve_type = '1',
+    	    Oa.last_upd_time = CURRENT TIMESTAMP, Oa.last_upd_by = :operator,
+    	    Oa.abn_del_time = CURRENT TIMESTAMP, Oa.abn_del_operator = :operator,
+    	    Oa.abn_resolve_time = CURRENT TIMESTAMP, Oa.abn_operator = :operator
+    	WHERE 	Oa.row_id = :rowId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_abn">
+    	<![CDATA[
+			update SO_ST_ORDI_ABN set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_pay">
+    	<![CDATA[
+			update SO_ORDI_PAY set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_extd">
+    	<![CDATA[
+			update SO_ORDI_EXTD set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_giftgood">
+    	<![CDATA[
+    	   update SO_ORDI_GIFTGOOD set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_sev">
+    	<![CDATA[
+			update SO_ORDI_SRV set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_inv_print">
+    	<![CDATA[
+			update SO_ORDI_INV_PRINT set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_voucher">
+    	<![CDATA[
+			update SO_ORDI_VOUCHER set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_visual">
+    	<![CDATA[
+			update SO_ORDI_VISUAL set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_visual_abn">
+    	<![CDATA[
+			update SO_ORDI_VISUAL_ABN set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_ordi_cont">
+    	<![CDATA[
+    	    update SO_ORDI_CONT set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where contract_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 更改状态为失效 -->
+	<sql id="inval_st_ordi_status">
+    	<![CDATA[
+    	    update SO_ST_ORDI_STATUS set active_flag=0,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId
+    	]]>
+	</sql>
+	<!-- 根据OMS订单行号及操作状态编码更新订单行操作日志表记录中的快递单号、快递公司、快递公司编码三个字段 -->
+	<sql id="updateCOrdiStatusLog">
+    	<![CDATA[
+    		UPDATE 	SO_C_ORDI_STATUS_LOG SET LAST_UPD_TIME = CURRENT TIMESTAMP, last_upd_by = 'OMS'
+    		<#if expressCode?exists && expressCode!=""> ,EXPRESS_CODE = :expressCode  </#if>
+    		<#if expressCompany?exists && expressCompany!=""> ,EXPRESS_COMPANY = :expressCompany  </#if>
+    		<#if expressCompanyCode?exists && expressCompanyCode!=""> ,EXPRESS_COMPANY_CODE = :expressCompanyCode  </#if>
+    		WHERE ORDER_ITEM_ID = :orderItemId and PROCESS_CODE =:processCode
+    	]]>
+	</sql>
+
+	<!-- 根据订单行号删除订单行数据 -->
+	<sql id="delete_direct_ordi_By_orderItemId">
+    	<![CDATA[
+    		delete from SO_ORDI WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 删除指定订单行的优惠券信息 -->
+	<sql id="removeOrdiVoucher">
+    	<![CDATA[
+    	DELETE FROM So_ordi_voucher
+    	WHERE order_item_id = :orderItemId
+    	]]>
+	</sql>
+	<!-- 物理删除订单行支付信息 gx -->
+	<sql id="delete_ordiPay_by_ordiId">
+    	<![CDATA[
+    	   delete
+    	   FROM So_ordi_pay
+			WHERE ORDER_ITEM_ID = :orderItemId AND bill_type = :billType 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除返积分信息 -->
+	<sql id="delete_direct_ordiRewardPoint_By_orderItemId">
+    	<![CDATA[
+    		delete from SO_ORDI_REWARD_POINTS  WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除订单返券信息 -->
+	<sql id="delete_direct_ordiRewardPromo_By_orderItemId">
+    	<![CDATA[
+    		delete from SO_ORDI_REWARD_PROMO WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除赠品订单行扩展 -->
+	<sql id="delete_direct_ordiGiftGood_By_orderItemId">
+    	<![CDATA[
+    		delete from SO_ORDI_GIFTGOOD WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除整单逻辑表 -->
+	<sql id="delete_direct_soOrdRela_By_orderItemId">
+    	<![CDATA[
+    		delete from SO_ORD_RELATIONSHIP  WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除服务商品信息 -->
+	<sql id="delete_direct_ordsrv_By_orderItemId">
+    	<![CDATA[
+    		delete from SO_ORDI_SRV  WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除订单行促销单 -->
+	<sql id="delete_direct_soOrdiVoucher_By_orderItemId">
+    	<![CDATA[
+    		delete from SO_ORDI_VOUCHER  WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除订单行支付 -->
+	<sql id="delete_direct_soOrdiPay_By_orderItemId">
+    	<![CDATA[
+    		delete from SO_ORDI_PAY  WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除欠款表信息 -->
+	<sql id="delete_direct_soOverDraft_By_orderItemId">
+    	<![CDATA[
+    		delete from SO_OVERDRAFT WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除订单行促销券 -->
+	<sql id="delete_direct_soOrdiProm_By_orderItemId">
+    	<![CDATA[
+    		delete from SO_ORDI_PROM WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除SO_RET_ORDER -->
+	<sql id="delete_direct_soRetOrder_by_RetordItemId">
+    	<![CDATA[
+    	delete from SO_RET_ORDER WHERE RETORD_ITEM_ID = :retordItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除 实体与延保商品异常订单行 -->
+	<sql id="delete_direct_soStOrdiAbn_By_orderItemId">
+    	<![CDATA[
+    	delete from SO_ST_ORDI_ABN WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除 实体与延保商品异常订单行 -->
+	<sql id="delete_direct_soStOrdiStatus_By_orderItemId">
+    	<![CDATA[
+    	delete from SO_ST_ORDI_STATUS WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除 延保订单行扩展 -->
+	<sql id="delete_direct_soStOrdiExtd_By_orderItemId">
+    	<![CDATA[
+    	delete from SO_ORDI_EXTD WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单行号删除 延保订单行扩展 -->
+	<sql id="delete_direct_soOrdiVisual_By_orderItemId">
+    	<![CDATA[
+    	delete from SO_ORDI_VISUAL WHERE ORDER_ITEM_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 根据订单号删除订单头支付信息 -->
+	<sql id="delete_direct_SoOrdiCont_By_orderItemId">
+    	<![CDATA[
+    	delete from SO_ORDI_CONT WHERE CONTRACT_ID = :orderItemId 
+    	]]>
+	</sql>
+	<!-- 清空订单行的BOL号 -->
+	<sql id="clean_ordi_bol_by_orderItemId">
+    	<![CDATA[
+    	update so_ordi set BOL_NO = NULL,last_upd_by='OMS',Last_upd_time=current timestamp where order_item_id = :orderItemId and ACTIVE_FLAG=1
+    	]]>
+	</sql>
+	<!-- 清空欠款表的BOL号 -->
+	<sql id="clean_overdraft_bol_by_orderItemId">
+    	<![CDATA[
+    	update so_overdraft set BOL_NO = NULL ,last_upd_by='OMS',Last_upd_time=current timestamp where order_item_id = :orderItemId and ACTIVE_FLAG=1
+    	]]>
+	</sql>
+	<!-- 更改欠款表的还欠款方式 -->
+	<sql id="update_overdraft_payType_by_orderItemId">
+    	<![CDATA[
+    	update so_overdraft set  pay_type=:payType ,last_upd_by='OMS',Last_upd_time=current timestamp where order_item_id = :orderItemId and ACTIVE_FLAG=1
+    	]]>
+	</sql>
+	<!-- 更改支付表的还欠款方式 -->
+	<sql id="update_payType_by_payCode">
+    	<![CDATA[
+			update SO_ORDI_PAY set pay_type=:payType,last_upd_by='OMS',Last_upd_time=current timestamp   where order_item_id =:orderItemId and pay_code=:payCode and ACTIVE_FLAG = 1
+    	]]>
+	</sql>
+	
+	<!-- 根据订单行号查询订单行信息，不需要传正逆向标识。 -->
+	<sql id="query_odrerItem_By_orderItemId_no_billType">
+    	<![CDATA[
+    		SELECT ROW_ID, ORDER_ID, ORDER_ITEM_ID, B2C_ORDER_ID, B2CORDER_ITEM_ID, SAP_ORDER_ID, ORDER_TYPE, POSORDER_ID, DIST_CHANNEL, STORE_CODE, COMMODITY_CODE, SAPPRODUCT_CODE, COMMODITY_NAME, EAN_CODE, SUPPLIER_CODE, PRODUCT_LEVEL, SALE_ORG, SALE_NUM, SALE_UNIT, UNIT_PRICE, SAL_ORG_SHOP, STOCK_AREA, PROVIDE_ADDRESS, SERVICE_FEE, TRANSPORT_FEE, PAY_AMOUNT, TOTAL_AMOUNT, TASK_FLAG, HAS_SERVICE, MAINTAIN_NUM, ENCHASE_DETAIL, BOL_NO, SHIP_CONDITION, INFO_SOURCE, PURCHASE_FLAG, ADS_PAGE, CASHER_ID, SALES_PERSON, PROTION_ACTION_CODE, COUPON_TOTAL_MONEY, MANAGER_CARD_MONEY, VOUCHER_TOTAL_MONEY, MANAGER_CARD_NO, DISTRIBUTE_TYPE, CONSUME_TERM, HOPE_ARRIVAL_TIME, PLAN_OUT_TIME, DELIVERY_COMMENTS, PROM_TICKET_MONEY, PICKUP_SITES_CODE, GIFG_NUM, IF_PART_SEND, BILL_TYPE, ORDITM_CLASS, ORDER_ITEM_STAUTS, ORDER_ITEM_REMARK, CREATED_BY, CREATED_TIME, LAST_UPD_BY, LAST_UPD_TIME, ACTIVE_FLAG, REMARK, BIZ_FLOW_CODE, DIVISION, SUP_RPSTRY_CODE, SAP_VOUCHER_NO, AGENCY_FLAG, PRICE_FILE_NO, SUP_PROVIDE_ADDRESS, COM_CHARACTER, I_UNIK, PAY_MODE_NUM, INVOICE_PRINT_SHOP, DELIVERY_AREA, PACKAGE_NO, MAINTAIN_FLAG, SETMEAL_CODE, IF_PART_CANCEL, DISTRIBUTE_PROVIDER, PAY_TYPE, PAY_TERMINAL, CASHER_TERMINAL_ID, CURRENCY_TYPE, POINT_AMOUNT, AB_BANK_FLAG, SERIAL_NUMBER, IMPREFECTION_GRADE, C_PROTOTYPE_ID, RELATION_ORDER_ITEM_ID, INEVITABLE_FLAG, RECEIPT_TYPE, DELI_SIGNATURE_TYPE, AGREEMENT_ID, AGREEMENT_TYPE, SPECIAL_BUSINESS, CMF_ORDER_TYPE, CMF_ORDER_NAME, POINT_MONEY, C_PROTOTYPE_EAN, INVOICE_ID, B2C_BUSINESS_ORDER, OVER_SALE_QTY
+    		FROM SO_ORDI WHERE ORDER_ITEM_ID=:orderItemId FETCH FIRST 1 ROWS ONLY FOR READ ONLY WITH CS 
+    	]]>
+	</sql>
+</sqlMap>

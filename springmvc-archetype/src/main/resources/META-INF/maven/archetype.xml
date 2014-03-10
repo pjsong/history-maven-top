@@ -1,0 +1,32 @@
+<archetype>
+  <id>springmvc-archetype</id>
+  <sources>
+    <source>src/main/java/web/controller/IndexController.java</source>
+  </sources>
+  <resources>
+    <resource>src/main/resources/conf/setting-web.properties</resource>
+    <resource>src/main/resources/conf/spring/application-core.xml</resource>
+    <resource>src/main/resources/conf/spring/application-log.xml</resource>
+    <resource>src/main/resources/conf/spring/application-servlet-view-freemarker.xml</resource>
+    <resource>src/main/resources/conf/spring/application-servlet-view-jsp.xml</resource>
+    <resource>src/main/resources/conf/spring/application-servlet-view-velocity.xml</resource>
+    <resource>src/main/resources/conf/spring/application-servlet-view.xml</resource>
+    <resource>src/main/resources/conf/spring/application-servlet.xml</resource>
+    <resource>src/main/resources/conf/spring/views.properties</resource>
+  </resources>
+  <testSources>
+    <source>src/test/java/base/BaseTest.java</source>
+  </testSources>
+  <testResources>
+    <resource>src/test/resources/conf/spring/base.xml</resource>
+    <resource>src/test/resources/conf/spring/setting-test.properties</resource>
+  </testResources>
+  <siteResources>
+    <resource>src/main/webapp/index.jsp</resource>
+    <resource>src/main/webapp/WEB-INF/decorators.xml</resource>
+    <resource>src/main/webapp/WEB-INF/web.xml</resource>
+    <resource>src/main/webapp/WEB-INF/views/ftl/index.ftl</resource>
+    <resource>src/main/webapp/WEB-INF/views/vm/index.vm</resource>
+    <resource>src/main/webapp/WEB-INF/views/jsp/index.jsp</resource>
+  </siteResources>
+</archetype>
