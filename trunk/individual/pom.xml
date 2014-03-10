@@ -9,7 +9,7 @@
   <artifactId>individual</artifactId>
   <packaging>pom</packaging>
   <modules>
-  	<module>io-tools</module>
-  	<module>study</module>
+  <module>../io-tools</module>
+  <module>../study</module>
   </modules>
 </project>

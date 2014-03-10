@@ -16,7 +16,6 @@
   	</dependency>
   </dependencies>
   <modules>
-  <module>../../springmvc</module>
-  <module>framework</module>
+  	<module>../framework</module>
   </modules>
 </project>
