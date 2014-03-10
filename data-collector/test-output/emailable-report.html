@@ -29,109 +29,21 @@ div.shootout {padding:2em;border:3px #4854A8 solid}
 <body>
 <table cellspacing=0 cellpadding=0 class="param">
 <tr><th>Test</th><th class="numi">Methods<br/>Passed</th><th class="numi">Scenarios<br/>Passed</th><th class="numi"># skipped</th><th class="numi"># failed</th><th class="numi">Total<br/>Time</th><th class="numi">Included<br/>Groups</th><th class="numi">Excluded<br/>Groups</th></tr>
-<tr><td style="text-align:left;padding-right:2em">Default test</td><td class="numi">0</td><td class="numi">0</td><td class="numi">0</td><td class="numi_attn">1</td><td class="numi">1,064.0 seconds</td><td class="numi"></td><td class="numi"></td></tr>
+<tr><td style="text-align:left;padding-right:2em">Default test</td><td class="numi">0</td><td class="numi">0</td><td class="numi">0</td><td class="numi_attn">1</td><td class="numi">8.4 seconds</td><td class="numi"></td><td class="numi"></td></tr>
 </table>
 <a id="summary"></a>
 <table cellspacing=0 cellpadding=0 class="passed">
 <tr><th>Class</th><th>Method</th><th># of<br/>Scenarios</th><th>Start</th><th>Time<br/>(ms)</th></tr>
 <tr><th colspan="4">Default test &#8212; failed</th></tr>
-<tr class="failedodd"><td rowspan="1">site.netease.NetEaseHistoryReadTest<td><a href="#m1"><b>getParameter</b>  </a></td><td class="numi">1</td><td>1394386996905</td><td class="numi">1062564</td></tr>
+<tr class="failedodd"><td rowspan="1">site.netease.NetEaseHistoryReadTest<td><a href="#m1"><b>getParameter</b>  </a></td><td class="numi">1</td><td>1394464459322</td><td class="numi">3373</td></tr>
 </table>
 <h1>Default test</h1>
 <a id="m1"></a><h2>site.netease.NetEaseHistoryReadTest:getParameter</h2>
 <div style="padding-left:3em">
-<p>Could not get JDBC Connection; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.</p>
-org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:80)
-<br/>at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:573)
-<br/>at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:843)
-<br/>at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.update(NamedParameterJdbcTemplate.java:288)
-<br/>at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.update(NamedParameterJdbcTemplate.java:270)
-<br/>at dao.dal.impl.DataBaseOperation.persist(DataBaseOperation.java:67)
-<br/>at site.netease.NetEaseHistoryRead.writeDTOFromLine(NetEaseHistoryRead.java:88)
-<br/>at site.netease.NetEaseHistoryRead.writeTextTable(NetEaseHistoryRead.java:63)
-<br/>at site.netease.NetEaseHistoryRead.writeCodes(NetEaseHistoryRead.java:42)
-<br/>at site.netease.NetEaseHistoryReadTest.getParameter(NetEaseHistoryReadTest.java:16)
-<br/>32 lines not shown
-<p>Caused by Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.</p>
-sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-<br/>at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
-<br/>at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-<br/>at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
-<br/>at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
-<br/>at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1121)
-<br/>at com.mysql.jdbc.MysqlIO.&lt;init&gt;(MysqlIO.java:357)
-<br/>at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2479)
-<br/>at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2516)
-<br/>at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2301)
-<br/>at com.mysql.jdbc.ConnectionImpl.&lt;init&gt;(ConnectionImpl.java:834)
-<br/>at com.mysql.jdbc.JDBC4Connection.&lt;init&gt;(JDBC4Connection.java:47)
-<br/>at sun.reflect.GeneratedConstructorAccessor16.newInstance(Unknown Source)
-<br/>at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-<br/>at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
-<br/>at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
-<br/>at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:416)
-<br/>at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:346)
-<br/>at java.sql.DriverManager.getConnection(DriverManager.java:571)
-<br/>at java.sql.DriverManager.getConnection(DriverManager.java:187)
-<br/>at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriverManager(DriverManagerDataSource.java:173)
-<br/>at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriver(DriverManagerDataSource.java:164)
-<br/>at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnectionFromDriver(AbstractDriverBasedDataSource.java:149)
-<br/>at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnection(AbstractDriverBasedDataSource.java:119)
-<br/>at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:111)
-<br/>at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:77)
-<br/>at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:573)
-<br/>at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:843)
-<br/>at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.update(NamedParameterJdbcTemplate.java:288)
-<br/>at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.update(NamedParameterJdbcTemplate.java:270)
-<br/>at dao.dal.impl.DataBaseOperation.persist(DataBaseOperation.java:67)
-<br/>at site.netease.NetEaseHistoryRead.writeDTOFromLine(NetEaseHistoryRead.java:88)
-<br/>at site.netease.NetEaseHistoryRead.writeTextTable(NetEaseHistoryRead.java:63)
-<br/>at site.netease.NetEaseHistoryRead.writeCodes(NetEaseHistoryRead.java:42)
-<br/>at site.netease.NetEaseHistoryReadTest.getParameter(NetEaseHistoryReadTest.java:16)
-<br/>32 lines not shown
-<p>Caused by Connection timed out: connect</p>
-java.net.DualStackPlainSocketImpl.connect0(Native Method)
-<br/>at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-<br/>at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
-<br/>at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
-<br/>at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
-<br/>at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-<br/>at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-<br/>at java.net.Socket.connect(Socket.java:579)
-<br/>at java.net.Socket.connect(Socket.java:528)
-<br/>at java.net.Socket.&lt;init&gt;(Socket.java:425)
-<br/>at java.net.Socket.&lt;init&gt;(Socket.java:241)
-<br/>at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:259)
-<br/>at com.mysql.jdbc.MysqlIO.&lt;init&gt;(MysqlIO.java:307)
-<br/>at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2479)
-<br/>at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2516)
-<br/>at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2301)
-<br/>at com.mysql.jdbc.ConnectionImpl.&lt;init&gt;(ConnectionImpl.java:834)
-<br/>at com.mysql.jdbc.JDBC4Connection.&lt;init&gt;(JDBC4Connection.java:47)
-<br/>at sun.reflect.GeneratedConstructorAccessor16.newInstance(Unknown Source)
-<br/>at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-<br/>at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
-<br/>at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
-<br/>at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:416)
-<br/>at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:346)
-<br/>at java.sql.DriverManager.getConnection(DriverManager.java:571)
-<br/>at java.sql.DriverManager.getConnection(DriverManager.java:187)
-<br/>at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriverManager(DriverManagerDataSource.java:173)
-<br/>at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriver(DriverManagerDataSource.java:164)
-<br/>at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnectionFromDriver(AbstractDriverBasedDataSource.java:149)
-<br/>at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnection(AbstractDriverBasedDataSource.java:119)
-<br/>at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:111)
-<br/>at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:77)
-<br/>at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:573)
-<br/>at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:843)
-<br/>at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.update(NamedParameterJdbcTemplate.java:288)
-<br/>at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.update(NamedParameterJdbcTemplate.java:270)
-<br/>at dao.dal.impl.DataBaseOperation.persist(DataBaseOperation.java:67)
-<br/>at site.netease.NetEaseHistoryRead.writeDTOFromLine(NetEaseHistoryRead.java:88)
+<p>For input string: &quot;¿ªÅÌ¼Û&quot;</p>
+sun.misc.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:1241)
+<br/>at java.lang.Double.valueOf(Double.java:504)
+<br/>at site.netease.NetEaseHistoryRead.writeDTOFromLine(NetEaseHistoryRead.java:80)
 <br/>at site.netease.NetEaseHistoryRead.writeTextTable(NetEaseHistoryRead.java:63)
 <br/>at site.netease.NetEaseHistoryRead.writeCodes(NetEaseHistoryRead.java:42)
 <br/>at site.netease.NetEaseHistoryReadTest.getParameter(NetEaseHistoryReadTest.java:16)

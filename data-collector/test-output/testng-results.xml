@@ -2,33 +2,34 @@
 <testng-results skipped="0" failed="1" total="1" passed="0">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="1064047" started-at="2014-03-10T01:43:15Z" finished-at="2014-03-10T02:00:59Z">
+  <suite name="Default suite" duration-ms="8396" started-at="2014-03-10T23:14:14Z" finished-at="2014-03-10T23:14:22Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="1064047" started-at="2014-03-10T01:43:15Z" finished-at="2014-03-10T02:00:59Z">
+    <test name="Default test" duration-ms="8396" started-at="2014-03-10T23:14:14Z" finished-at="2014-03-10T23:14:22Z">
       <class name="site.netease.NetEaseHistoryReadTest">
-        <test-method status="PASS" signature="springTestContextPrepareTestInstance()[pri:0, instance:site.netease.NetEaseHistoryReadTest@5183093c]" name="springTestContextPrepareTestInstance" is-config="true" duration-ms="1467" started-at="2014-03-10T01:43:15Z" depends-on-methods="org.springframework.test.context.testng.AbstractTestNGSpringContextTests.springTestContextBeforeTestClass" finished-at="2014-03-10T01:43:16Z">
-        </test-method> <!-- springTestContextPrepareTestInstance -->
-        <test-method status="PASS" signature="springTestContextBeforeTestClass()[pri:0, instance:site.netease.NetEaseHistoryReadTest@5183093c]" name="springTestContextBeforeTestClass" is-config="true" duration-ms="0" started-at="2014-03-10T01:43:15Z" finished-at="2014-03-10T01:43:15Z">
+        <test-method status="PASS" signature="springTestContextBeforeTestClass()[pri:0, instance:site.netease.NetEaseHistoryReadTest@4b465dd5]" name="springTestContextBeforeTestClass" is-config="true" duration-ms="12" started-at="2014-03-10T23:14:14Z" finished-at="2014-03-10T23:14:14Z">
         </test-method> <!-- springTestContextBeforeTestClass -->
-        <test-method status="FAIL" signature="getParameter()[pri:0, instance:site.netease.NetEaseHistoryReadTest@5183093c]" name="getParameter" duration-ms="1062564" started-at="2014-03-10T01:43:16Z" finished-at="2014-03-10T02:00:59Z">
-          <exception class="org.springframework.jdbc.CannotGetJdbcConnectionException">
+        <test-method status="PASS" signature="springTestContextPrepareTestInstance()[pri:0, instance:site.netease.NetEaseHistoryReadTest@4b465dd5]" name="springTestContextPrepareTestInstance" is-config="true" duration-ms="4978" started-at="2014-03-10T23:14:14Z" depends-on-methods="org.springframework.test.context.testng.AbstractTestNGSpringContextTests.springTestContextBeforeTestClass" finished-at="2014-03-10T23:14:19Z">
+        </test-method> <!-- springTestContextPrepareTestInstance -->
+        <test-method status="PASS" signature="springTestContextBeforeTestMethod(java.lang.reflect.Method)[pri:0, instance:site.netease.NetEaseHistoryReadTest@4b465dd5]" name="springTestContextBeforeTestMethod" is-config="true" duration-ms="1" started-at="2014-03-10T23:14:19Z" finished-at="2014-03-10T23:14:19Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void site.netease.NetEaseHistoryReadTest.getParameter()]]>
+              </value>
+            </param>
+          </params>
+        </test-method> <!-- springTestContextBeforeTestMethod -->
+        <test-method status="FAIL" signature="getParameter()[pri:0, instance:site.netease.NetEaseHistoryReadTest@4b465dd5]" name="getParameter" duration-ms="3373" started-at="2014-03-10T23:14:19Z" finished-at="2014-03-10T23:14:22Z">
+          <exception class="java.lang.NumberFormatException">
             <message>
-              <![CDATA[Could not get JDBC Connection; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.]]>
+              <![CDATA[For input string: "开盘价"]]>
             </message>
             <full-stacktrace>
-              <![CDATA[org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:80)
-	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:573)
-	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:843)
-	at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.update(NamedParameterJdbcTemplate.java:288)
-	at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.update(NamedParameterJdbcTemplate.java:270)
-	at dao.dal.impl.DataBaseOperation.persist(DataBaseOperation.java:67)
-	at site.netease.NetEaseHistoryRead.writeDTOFromLine(NetEaseHistoryRead.java:88)
+              <![CDATA[java.lang.NumberFormatException: For input string: "开盘价"
+	at sun.misc.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:1241)
+	at java.lang.Double.valueOf(Double.java:504)
+	at site.netease.NetEaseHistoryRead.writeDTOFromLine(NetEaseHistoryRead.java:80)
 	at site.netease.NetEaseHistoryRead.writeTextTable(NetEaseHistoryRead.java:63)
 	at site.netease.NetEaseHistoryRead.writeCodes(NetEaseHistoryRead.java:42)
 	at site.netease.NetEaseHistoryReadTest.getParameter(NetEaseHistoryReadTest.java:16)
@@ -63,65 +64,11 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 	at org.testng.remote.RemoteTestNG.run(RemoteTestNG.java:109)
 	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:202)
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:173)
-Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1121)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:357)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2479)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2516)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2301)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:834)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
-	at sun.reflect.GeneratedConstructorAccessor16.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:416)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:346)
-	at java.sql.DriverManager.getConnection(DriverManager.java:571)
-	at java.sql.DriverManager.getConnection(DriverManager.java:187)
-	at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriverManager(DriverManagerDataSource.java:173)
-	at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriver(DriverManagerDataSource.java:164)
-	at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnectionFromDriver(AbstractDriverBasedDataSource.java:149)
-	at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnection(AbstractDriverBasedDataSource.java:119)
-	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:111)
-	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:77)
-	... 40 more
-Caused by: java.net.ConnectException: Connection timed out: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:579)
-	at java.net.Socket.connect(Socket.java:528)
-	at java.net.Socket.<init>(Socket.java:425)
-	at java.net.Socket.<init>(Socket.java:241)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:259)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:307)
-	... 59 more
 ]]>
             </full-stacktrace>
-          </exception> <!-- org.springframework.jdbc.CannotGetJdbcConnectionException -->
+          </exception> <!-- java.lang.NumberFormatException -->
         </test-method> <!-- getParameter -->
-        <test-method status="PASS" signature="springTestContextBeforeTestMethod(java.lang.reflect.Method)[pri:0, instance:site.netease.NetEaseHistoryReadTest@5183093c]" name="springTestContextBeforeTestMethod" is-config="true" duration-ms="0" started-at="2014-03-10T01:43:16Z" finished-at="2014-03-10T01:43:16Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[public void site.netease.NetEaseHistoryReadTest.getParameter()]]>
-              </value>
-            </param>
-          </params>
-        </test-method> <!-- springTestContextBeforeTestMethod -->
-        <test-method status="PASS" signature="springTestContextAfterTestMethod(java.lang.reflect.Method)[pri:0, instance:site.netease.NetEaseHistoryReadTest@5183093c]" name="springTestContextAfterTestMethod" is-config="true" duration-ms="0" started-at="2014-03-10T02:00:59Z" finished-at="2014-03-10T02:00:59Z">
+        <test-method status="PASS" signature="springTestContextAfterTestMethod(java.lang.reflect.Method)[pri:0, instance:site.netease.NetEaseHistoryReadTest@4b465dd5]" name="springTestContextAfterTestMethod" is-config="true" duration-ms="3" started-at="2014-03-10T23:14:22Z" finished-at="2014-03-10T23:14:22Z">
           <params>
             <param index="0">
               <value>
@@ -130,7 +77,7 @@ Caused by: java.net.ConnectException: Connection timed out: connect
             </param>
           </params>
         </test-method> <!-- springTestContextAfterTestMethod -->
-        <test-method status="PASS" signature="springTestContextAfterTestClass()[pri:0, instance:site.netease.NetEaseHistoryReadTest@5183093c]" name="springTestContextAfterTestClass" is-config="true" duration-ms="0" started-at="2014-03-10T02:00:59Z" finished-at="2014-03-10T02:00:59Z">
+        <test-method status="PASS" signature="springTestContextAfterTestClass()[pri:0, instance:site.netease.NetEaseHistoryReadTest@4b465dd5]" name="springTestContextAfterTestClass" is-config="true" duration-ms="1" started-at="2014-03-10T23:14:22Z" finished-at="2014-03-10T23:14:22Z">
         </test-method> <!-- springTestContextAfterTestClass -->
       </class> <!-- site.netease.NetEaseHistoryReadTest -->
     </test> <!-- Default test -->
