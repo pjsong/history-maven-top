@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<version>1</version>
+	<pluginVersion><![CDATA[2.9.0.201203011806-RELEASE]]></pluginVersion>
+	<configSuffixes>
+		<configSuffix><![CDATA[xml]]></configSuffix>
+	</configSuffixes>
+	<enableImports><![CDATA[true]]></enableImports>
+	<configs>
+		<config>src/main/resources/spring/bean.xml</config>
+		<config>src/main/resources/spring/quartz.xml</config>
+		<config>src/main/resources/spring/tasks.xml</config>
+	</configs>
+	<configSets>
+	</configSets>
+</beansProjectDescription>
