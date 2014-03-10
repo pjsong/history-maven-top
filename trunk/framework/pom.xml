@@ -5,7 +5,7 @@
     <groupId>mvnhistory</groupId>
     <artifactId>3rd</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath>../history-mvn-top</relativePath>
+    <relativePath>../3rd</relativePath>
   </parent>
   <artifactId>framework</artifactId>
   <packaging>pom</packaging>
@@ -18,7 +18,4 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  <modules>
-    <module>springmvc</module>
-  </modules>
 </project>
