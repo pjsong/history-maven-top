@@ -4,6 +4,7 @@
     <groupId>mvnhistory</groupId>
     <artifactId>individual</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../individual</relativePath>
   </parent>
   <artifactId>study</artifactId>
 </project>
