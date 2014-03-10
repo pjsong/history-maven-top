@@ -10,6 +10,6 @@
   <packaging>pom</packaging>
   <groupId>mvnhistory.web</groupId>
   <modules>
-  	<module>data-collector</module>
+  <module>../data-collector</module>
   </modules>
 </project>
