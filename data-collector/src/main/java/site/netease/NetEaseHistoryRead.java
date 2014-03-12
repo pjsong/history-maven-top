@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,17 +78,21 @@ public class NetEaseHistoryRead {
 	    dto.setDbInstanceId(dbNo);
 	    dto.setCreateDate(data[0]);
 	    dto.setCode(code);
-	    dto.setPriceOpen(Double.valueOf(data[6]));
-	    dto.setPriceHigh(Double.valueOf(data[4]));
-	    dto.setPriceLow(Double.valueOf(data[5]));
-	    dto.setPriceClose(Double.valueOf(data[3]));
-	    dto.setVolumn(Long.valueOf(data[11]));
-	    dto.setChgRate(Double.valueOf(data[10]));
-	    dto.setTotalMarketValue(Double.valueOf(data[13]));
-	    dto.setCurrentMarketValue(Double.valueOf(data[14]));
+	    dto.setPriceOpen(Double.valueOf(toBeTrans(data[6])));
+	    dto.setPriceHigh(Double.valueOf(toBeTrans(data[4])));
+	    dto.setPriceLow(Double.valueOf(toBeTrans(data[5])));
+	    dto.setPriceClose(Double.valueOf(toBeTrans(data[3])));
+	    dto.setVolumn(Long.valueOf(toBeTrans(data[11])));
+	    dto.setChgRate(Double.valueOf(toBeTrans(data[10])));
+	    dto.setTotalMarketValue(Double.valueOf(toBeTrans(data[13])));
+	    dto.setCurrentMarketValue(Double.valueOf(toBeTrans(data[14])));
 	    if(!tryPersist(dto, 3)){
 	    	throw new RuntimeException();
 	    }
+	}
+	
+	private String toBeTrans(String data){
+		return StringUtils.isBlank(data)?"0":data;
 	}
 	
 	private boolean tryPersist(NetEaseDTO dto, int times) {
