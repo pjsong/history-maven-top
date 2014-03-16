@@ -32,6 +32,8 @@ public interface DalClient{
      * @return 
      */
     <T> T persist(Object entity);
+    
+    <T> T persistList(Object entity, List<T> list);
 
     /** 单表修改操作 根据主键修改记录 
      * @param entity 

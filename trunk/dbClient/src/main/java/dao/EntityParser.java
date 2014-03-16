@@ -47,6 +47,7 @@ public class EntityParser {
     private List<String> fieldList = new ArrayList<String>();
 
     private String insert = null;
+    private String batchInsert = null;
 
     private String update = null;
 
@@ -77,7 +78,7 @@ public class EntityParser {
     /**
      * @param clazz
      */
-    private EntityParser(Class<? extends Object> clazz) {
+    private EntityParser(Class<?> clazz) {
         setFieldList(clazz);
         setTable(clazz);
         setId(clazz);
@@ -89,7 +90,23 @@ public class EntityParser {
         setSelectSql();
         setSelectAllSql();
     }
+    /**
+     * @param <T>
+     * @param clazz
+     */
+    private <T> EntityParser(Class<T> clazz, List<T> list) {
+        setFieldList(clazz);
+        setTable(clazz);
+        setId(clazz);
+        setColumnList(clazz);
 
+        setInsertSql();
+        setInsertSqlBatch(clazz, list);
+        setUpdateSql();
+        setDeleteSql();
+        setSelectSql();
+        setSelectAllSql();
+    }
     /**
      * 功能描述: <br>
      * 〈功能详细描述〉
@@ -102,7 +119,17 @@ public class EntityParser {
         return insert;
     }
 
-    /**
+    
+
+    public String getBatchInsert() {
+		return batchInsert;
+	}
+
+	public void setBatchInsert(String batchInsert) {
+		this.batchInsert = batchInsert;
+	}
+
+	/**
      * 功能描述: <br>
      * 〈功能详细描述〉
      *
@@ -218,6 +245,52 @@ public class EntityParser {
         sb.append(")");
         insert = sb.toString();
     }
+    
+    
+    private <T> void setInsertSqlBatch(Class<T> clazz, List<T> list) {
+        StringBuffer sb = new StringBuffer("INSERT INTO ");
+        sb.append(_table).append("(");
+//        
+//        if (!isGenerator) {
+//            if (_id != null && id != null) {
+//                sb.append(_id);
+//                sb.append(", ");
+//            }
+//        }
+
+        for (int i = 0; i < _columnList.size(); i++) {
+            if (propertyMap.get(_columnList.get(i)).insertable()) {
+                sb.append(_columnList.get(i));
+                sb.append(", ");
+            }
+        }
+        sb.deleteCharAt(sb.length() - 2);
+        sb.append(") VALUES ");
+        for(T t:list){
+            sb.append("(");
+//            if (!isGenerator) {
+//                if (_id != null && id != null) {
+//                    sb.append(":").append(id);
+//                    sb.append(", ");
+//                }
+//            }
+            Map<String, Object> result = parser(t);
+            for (int i = 0; i < _columnList.size(); i++) {
+
+				if (fieldMap.get(columnList.get(i)).insertable()) {
+					String strFormat = (String)result.get(columnList.get(i));
+					sb.append(strFormat == null? "null":"'"+strFormat+"'");
+					sb.append(", ");
+				}
+                
+            }
+            sb.deleteCharAt(sb.lastIndexOf(","));
+            sb.append("),");
+        }
+        sb.deleteCharAt(sb.lastIndexOf(","));
+        batchInsert = sb.toString();
+    }
+    
 
     private void setUpdateSql() {
         StringBuffer sb = new StringBuffer("UPDATE ");
@@ -272,19 +345,19 @@ public class EntityParser {
         selectAll = sb.toString();
     }
 
-    private void setTable(Class<? extends Object> clazz) {
+    private void setTable(Class<?> clazz) {
         Entity entity = clazz.getAnnotation(Entity.class);
         _table = entity.name();
     }
 
-    private void setFieldList(Class<? extends Object> clazz) {
+    private void setFieldList(Class<?> clazz) {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             fieldList.add(field.getName());
         }
     }
 
-    private void setId(Class<? extends Object> clazz) {
+    private void setId(Class<?> clazz) {
         Method[] methods = clazz.getMethods();
         for (Method method : methods) {
             if (method.isAnnotationPresent(Id.class)) {
@@ -301,7 +374,7 @@ public class EntityParser {
         }
     }
 
-    private void setColumnList(Class<? extends Object> clazz) {
+    private void setColumnList(Class<?> clazz) {
         Method[] methods = clazz.getMethods();
         Field[] fields = clazz.getDeclaredFields();
         Field[] superFields = clazz.getSuperclass().getDeclaredFields();
@@ -334,8 +407,8 @@ public class EntityParser {
     }
     
     private static class entityParserHolder{
-        private static Map<Class<? extends Object>, EntityParser> cache = new HashMap<Class<? extends Object>, EntityParser>();
-        public static EntityParser getEntityParser(Class<? extends Object> clazz) {
+        private static Map<Class<?>, EntityParser> cache = new HashMap<Class<?>, EntityParser>();
+        public static EntityParser getEntityParser(Class<?> clazz) {
             EntityParser entityParser = cache.get(clazz);
             if (entityParser == null) {
                 entityParser = new EntityParser(clazz);
@@ -350,10 +423,29 @@ public class EntityParser {
         }
     }
     
-    public static EntityParser getEntityParser(Class<? extends Object> clazz){
-        return entityParserHolder.getEntityParser(clazz);
+    private static class entityParserListHolder{
+        private static Map<Class<?>, EntityParser> cacheList = new HashMap<Class<?>, EntityParser>();
+        public static EntityParser getEntityParser(Class<?> clazz, List list) {
+            EntityParser entityParser = cacheList.get(clazz);
+            if (entityParser == null) {
+                entityParser = new EntityParser(clazz, list);
+                synchronized (cacheList) {
+                    if (cacheList.get(clazz) == null) {
+                    	cacheList.put(clazz, entityParser);
+                    }
+                }
+            }
+
+            return entityParser;
+        }
     }
     
+    public static EntityParser getEntityParser(Class<?> clazz){
+        return entityParserHolder.getEntityParser(clazz);
+    }
+    public static <T> EntityParser getEntityListParser(Class<?> clazz, List<?> entityList){
+        return entityParserListHolder.getEntityParser(clazz, entityList);
+    }
     public  Map<String, Object> parser(Object entity) {
         Map<String, Object> values = new HashMap<String, Object>();
         Method[] methods = entity.getClass().getMethods();
@@ -383,5 +475,16 @@ public class EntityParser {
             return format.format(date);
         }
         return date;
+    }
+    
+    
+    public static void main(String[] args){
+    	List l = new ArrayList<String>();
+    	List ll = new ArrayList<Date>();
+    	if(ll.getClass().equals(ArrayList.class)){
+    		System.out.println("s");
+    	}else{
+    		System.out.println("f");
+    	}
     }
 }

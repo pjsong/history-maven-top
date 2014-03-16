@@ -14,8 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+
+import com.mysql.jdbc.PreparedStatement;
 
 import dao.EntityParser;
 import dao.FreeMakerParser;
@@ -71,7 +74,14 @@ public class DataBaseOperation extends TransactionOperation {
         }
         return (T) key;
     }
-
+    public <T extends Object> T persistList(Object entity, List<T> entityList) {
+        EntityParser sqlParser = EntityParser.getEntityListParser(entity.getClass(), entityList);
+        String insertSQL = sqlParser.getBatchInsert();
+        Map<String, Object> paramMap = sqlParser.parser(entityList.get(0));
+        logMessage("persist", insertSQL, paramMap);
+        getValidateJdbcTemplate(paramMap).update(insertSQL, new MapSqlParameterSource(paramMap));
+        return null;
+    }
     /**
      * 功能描述: <br>
      * 〈功能详细描述〉
