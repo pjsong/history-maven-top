@@ -278,8 +278,8 @@ public class EntityParser {
             for (int i = 0; i < _columnList.size(); i++) {
 
 				if (fieldMap.get(columnList.get(i)).insertable()) {
-					String strFormat = (String)result.get(columnList.get(i));
-					sb.append(strFormat == null? "null":"'"+strFormat+"'");
+					Object strFormat = result.get(columnList.get(i));
+					sb.append(strFormat == null? "null":"'"+strFormat.toString()+"'");
 					sb.append(", ");
 				}
                 
@@ -423,28 +423,17 @@ public class EntityParser {
         }
     }
     
-    private static class entityParserListHolder{
-        private static Map<Class<?>, EntityParser> cacheList = new HashMap<Class<?>, EntityParser>();
-        public static EntityParser getEntityParser(Class<?> clazz, List list) {
-            EntityParser entityParser = cacheList.get(clazz);
-            if (entityParser == null) {
-                entityParser = new EntityParser(clazz, list);
-                synchronized (cacheList) {
-                    if (cacheList.get(clazz) == null) {
-                    	cacheList.put(clazz, entityParser);
-                    }
-                }
-            }
-
-            return entityParser;
-        }
-    }
+//    private static class entityParserListHolder{
+//        public static EntityParser getEntityParser(Class<?> clazz, List list) {
+//            return new EntityParser(clazz, list);
+//        }
+//    }
     
     public static EntityParser getEntityParser(Class<?> clazz){
         return entityParserHolder.getEntityParser(clazz);
     }
-    public static <T> EntityParser getEntityListParser(Class<?> clazz, List<?> entityList){
-        return entityParserListHolder.getEntityParser(clazz, entityList);
+    public static <T> EntityParser getEntityListParser(Class<?> clazz, List entityList){
+        return new EntityParser(clazz, entityList);
     }
     public  Map<String, Object> parser(Object entity) {
         Map<String, Object> values = new HashMap<String, Object>();
