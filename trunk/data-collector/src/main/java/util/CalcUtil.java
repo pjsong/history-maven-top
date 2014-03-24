@@ -2,6 +2,9 @@
 package util;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * @author Administrator
@@ -17,10 +20,10 @@ public class CalcUtil {
 	
 	/**
 
-	 * @param index 0,1,2,3
-	 * @return fibonacci序列，1,1,2,3,5,8,13,21,34,...
+	 * @param index 0,1,2,3,4
+	 * @return fibonacci序列，1,2,3,5,8,13,21,34,...
 	 */
-	public static int getFiboNacci(int index){
+	private static int getFiboNacci(int index){
 		index = index+1;
 		double factor1 = 1/Math.sqrt(5d);
 		double term1 = Math.pow((1+Math.sqrt(5))/2, new Double(index));
@@ -32,7 +35,7 @@ public class CalcUtil {
 	 * @param fibValue, 1,1,2,3,
 	 * @return 0,0,1,2
 	 */
-	public static int getFibIndex(int fibValue){
+	private static int getFibIndex(int fibValue){
 		//极限Math.log(Math.sqrt(5)-1)/2
         double limit = (Math.sqrt(5)-1)/2;
         double logupper = Math.log(1d/fibValue);
@@ -41,14 +44,19 @@ public class CalcUtil {
 		return bd.setScale(0, 4).intValue();
 	}
 	
+	/**
+	 * add date from calendar
+	 * **/
+	public static Calendar getFibCalendar(Calendar calendar, int fibIndex){
+	    calendar.add(Calendar.DAY_OF_MONTH, getFiboNacci(fibIndex));
+	    return calendar;
+	}
 	
 	
 	public static void main(String[] args){
 		for (int i = 1; i < 10; i++) {
 			int fib = getFiboNacci(i);
-			int fib1 = getFiboNacci(i+1);
-			System.out.println( fib + " "
-					+ fib1);
+			System.out.println(fib);
 			int index = CalcUtil.getFibIndex(fib);
 			System.out.println(index);
 
