@@ -22,7 +22,7 @@
 	</sql>
 	<sql id="query_latest_calculated_day">
     	<![CDATA[
-    	    	SELECT * from yahoo_statistics WHERE code= :code order by createDate desc
+    	    	SELECT * from yahoo_statistics WHERE code= :code order by createDate desc limit 1
     	]]>
 	</sql>
 	<!-- 根据sapOrderId查询omsId -->
