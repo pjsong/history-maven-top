@@ -20,7 +20,6 @@
     	    	SELECT * from yahoo_statistics WHERE code= :code and createDate = :createDate order by createDate desc
     	]]>
 	</sql>
-	<!-- 根据B2C订单行号查询OMS订单行号 -->
 	<sql id="query_latest_calculated_day">
     	<![CDATA[
     	    	SELECT * from yahoo_statistics WHERE code= :code order by createDate desc
