@@ -56,12 +56,14 @@ public class WriterHistoryYahooHelper {
         
         return retStr.toString()+";"+retStrLow;
     }
+    
+    /**each element in the returned list is a start point for calc**/
     static ArrayList<Integer> breakPointIndex(List<YahooDTO> list_desc){
         ArrayList<Integer> ret = new ArrayList<Integer>();
         for(int index = 0;index<list_desc.size() -1 ;index++){
             double priceIndex = list_desc.get(index).getPriceHigh();
-            double priceIndexP = list_desc.get(index+1).getPriceHigh();
-            if(priceIndex/priceIndexP < 0.89 || priceIndex/priceIndexP > 1.11){
+            double priceIndexNext = list_desc.get(index+1).getPriceHigh();
+            if(priceIndex/priceIndexNext < 0.89 || priceIndex/priceIndexNext > 1.11){
                 ret.add(index);
             }
         }

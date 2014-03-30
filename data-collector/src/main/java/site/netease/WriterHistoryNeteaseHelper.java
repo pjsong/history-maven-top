@@ -87,27 +87,26 @@ public class WriterHistoryNeteaseHelper {
     /**历史记录中x天内最高最低**/
     static String inDaysHighLowWrite(NetEaseDTO currentDTO, List<NetEaseDTO> list_history, String dbNo){
         int highIndex = 0, lowIndex = 0;
-        String highIndexStr = "";
-        String lowIndexStr = "";
         //current highest, lowest
         double baseHigh = currentDTO.getPriceHigh();
         double baseLow = currentDTO.getPriceLow();
-        //count from current
-        for(int i = list_history.size() - 1; i >= 0; i--){
-            if(StringUtils.isBlank(highIndexStr) && list_history.get(i).getPriceHigh()<baseHigh){
-                highIndex++;
+        boolean highContinued = true;
+        boolean lowContinued = true;
+        for(int i = 0; i <list_history.size(); i++){
+            if(highContinued && list_history.get(i).getPriceHigh() < baseHigh){
+                highIndex ++;
             }else{
-                highIndexStr = ""+highIndex;
+                highContinued = false;
             }
-            if(StringUtils.isBlank(lowIndexStr) && list_history.get(i).getPriceLow()>baseLow){
+            if(lowContinued && list_history.get(i).getPriceLow()>baseLow){
                 lowIndex ++;
             }else{
-                lowIndexStr = ""+lowIndex;
+                lowContinued = false;
             }
-            if(StringUtils.isNotBlank(lowIndexStr) && StringUtils.isNotBlank(highIndexStr)){
+            if(!highContinued && !lowContinued){
                 break;
             }
-        }
+         }
         return highIndex+";"+lowIndex;
     }
     
@@ -115,19 +114,19 @@ public class WriterHistoryNeteaseHelper {
      * percentageStep is like 13,21,34,55,89,144,233,377
      * **/
     static int upDownWrite(NetEaseDTO currentDTO, List<NetEaseDTO> list_future, int percentageStep, boolean isUp){
-        if(list_future.size() <= 1){
+        if(list_future.size() <= 1 || currentDTO.getPriceHigh() == 0 || currentDTO.getPriceLow() == 0){
             return 0;
         }
         double priceCurrent = (currentDTO.getPriceHigh() + currentDTO.getPriceLow())/2;
-        for(int index = 0;index<list_future.size();index++){
+        for(int index = 1;index<list_future.size();index++){
             double priceIndexH = list_future.get(index).getPriceHigh();
-            double priceIndexL = list_future.get(index).getPriceHigh();
+            double priceIndexL = list_future.get(index).getPriceLow();
             double priceIndexM = (priceIndexH + priceIndexL)/2;
             //calculate down dates count
-            if(!isUp && priceIndexM/priceCurrent < (1d - new Double(percentageStep) / 100)){
+            if(!isUp && (priceIndexM/priceCurrent) < (1d - new Double(percentageStep) / 100)){
                 return index;
             }
-            if(isUp && priceIndexM/priceCurrent > (1d + new Double(percentageStep)/100)){
+            if(isUp && (priceIndexM/priceCurrent) > (1d + new Double(percentageStep)/100)){
                 return index;
             }
         }
