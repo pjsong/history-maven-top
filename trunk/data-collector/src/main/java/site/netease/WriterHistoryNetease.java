@@ -34,15 +34,16 @@ public class WriterHistoryNetease {
         List<String> codeToCollect = codeFilter.getByKey(codePrefix);
         for(String code:codeToCollect){
             Map param = new HashMap<String, String>();
-            param.put("code", CodeListUtil.transLocalToYahooCode(code));
+            param.put("code", CodeListUtil.transLocalToNeteaseCode(code));
             param.put("dbInstanceId", dbNo);
             List<NetEaseDTO> list_future = dalClient.queryForList("netease.query_price_by_code_asc", param,NetEaseDTO.class);
             List<NetEaseDTO> list_history = new ArrayList<NetEaseDTO>();
             if(list_future == null || list_future.size() == 0){
                 continue;
             }
-            for (int i = list_future.size() - 1; i >= 0; i--) {
-                NetEaseDTO netEaseDTO = list_future.get(i);
+            int list_future_size = list_future.size();
+            for (int i = 0; i < list_future_size ; i++) {
+                NetEaseDTO netEaseDTO = list_future.get(0);
                 list_future.remove(netEaseDTO);
                 doHistory(netEaseDTO, list_future, list_history, dbNo);
                 //list_history从当前往历史走
@@ -75,7 +76,7 @@ public class WriterHistoryNetease {
             statsDTO.setHighestInDays(Integer.valueOf(highLow[0]));
             statsDTO.setLowestInDays(Integer.valueOf(highLow[1]));
             dalClient.persist(statsDTO);
-        }else{
+        }else if(statsDTO.getHighestInDays() != Integer.valueOf(highLow[0]) || statsDTO.getLowestInDays() != Integer.valueOf(highLow[1])){
             statsDTO.setDbInstanceId(dbNo);
             statsDTO.setHighestInDays(Integer.valueOf(highLow[0]));
             statsDTO.setLowestInDays(Integer.valueOf(highLow[1]));
@@ -102,13 +103,13 @@ public class WriterHistoryNetease {
             dalClient.persist(statsDTO);
         } else if (isUp && 
                 (statsDTO.readUpDownField("getUp" + percentageStep) == null 
-                || !statsDTO.readUpDownField("getUp" + percentageStep).toString().equals(str))) {
+                || !statsDTO.readUpDownField("getUp" + percentageStep).toString().equals(str+""))) {
             statsDTO.setDbInstanceId(dbNo);
             statsDTO.writeUpDownField("setUp" + percentageStep, str);
             dalClient.dynamicMerge(statsDTO);
         } else if (!isUp && 
                 (statsDTO.readUpDownField("getDown" + percentageStep) == null 
-                || !statsDTO.readUpDownField("getDown" + percentageStep).toString().equals(str))) {
+                || !statsDTO.readUpDownField("getDown" + percentageStep).toString().equals(str+""))) {
             statsDTO.setDbInstanceId(dbNo);
             statsDTO.writeUpDownField("setDown" + percentageStep, str);
             dalClient.dynamicMerge(statsDTO);
@@ -142,7 +143,7 @@ public class WriterHistoryNetease {
         param.put("dbInstanceId", dbNo);
         param.put("createDate", createDate);
 //        SELECT * from yahoo_statistics WHERE code= :code and createDate = :createDate order by createDate desc
-        return dalClient.queryForObject("yahoo.query_statistics_by_code_date_stats", param,
+        return dalClient.queryForObject("netease.query_statistics_by_code_date_stats", param,
                 NetEaseStatisticDTO.class);
     }
 }

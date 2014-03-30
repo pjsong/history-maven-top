@@ -44,6 +44,28 @@ public class CalcUtil {
 		return bd.setScale(0, 4).intValue();
 	}
 	
+    /**
+     * given fibValue array, return the closest one to the targetIndex
+     * 
+     * @param fibValue [], targetIndex
+     * @return downward get the closest int value
+     */
+    private static int getFibIndex(int fibValue[], int targetIndex) {
+        int ret = 0;
+        if (fibValue.length < 1) {
+            return ret;
+        }
+        int targetValue = getFiboNacci(targetIndex);
+        ret = fibValue[0];
+        int temp = Integer.MAX_VALUE;
+        for (int value : fibValue) {
+            if (Math.abs(value - targetValue) < temp) {
+                temp = Math.abs(value - targetValue);
+                ret = value;
+            }
+        }
+        return ret;
+    }
 	/**
 	 * add date from calendar
 	 * **/
@@ -51,7 +73,12 @@ public class CalcUtil {
 	    calendar.add(Calendar.DAY_OF_MONTH, getFiboNacci(fibIndex));
 	    return calendar;
 	}
-	
+	   /**
+     * add date from calendar
+     * **/
+    public static long getDaysBetweenCalendar(Calendar calendar1, Calendar calendar2){
+        return Math.abs(calendar1.getTimeInMillis() - calendar2.getTimeInMillis())/1000/3600/24;
+    }
 	
 	public static void main(String[] args){
 		for (int i = 1; i < 10; i++) {
@@ -59,7 +86,7 @@ public class CalcUtil {
 			System.out.println(fib);
 			int index = CalcUtil.getFibIndex(fib);
 			System.out.println(index);
-
 		}
+		
 	}
 }
