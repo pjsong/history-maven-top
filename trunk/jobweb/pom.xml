@@ -90,6 +90,21 @@
 			<artifactId>spring-test</artifactId>
 			<version>3.2.4.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>mvnhistory.web.stock</groupId>
+			<artifactId>data-collector</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>3.2.4.RELEASE</version>
+		</dependency>
 	</dependencies>
 	<groupId>web</groupId>
 	<version>1.0</version>
