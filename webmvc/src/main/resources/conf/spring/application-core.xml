@@ -20,7 +20,6 @@
 	<!-- 注解：扫描包 -->
 	<context:component-scan base-package="web.*" />
 
-	<!-- 加载属�?配置文件 注：只允许加载一�?-->
 	<bean id="propertyConfig"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
