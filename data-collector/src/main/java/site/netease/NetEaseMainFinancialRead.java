@@ -15,12 +15,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import util.CodeListUtil;
+import bean.NetEaseDTO;
 import bean.NetEaseMainFinancialDTO;
 import codelist.CodeFilter;
 import dao.dal.DalClient;
@@ -64,92 +66,66 @@ public class NetEaseMainFinancialRead {
             return;
         }
         writeDTOFromLine(inputLineArr, code, dbNo);
-        // writeDTOFromLineBatch(inputLineArr, code, dbNo);
     }
 
-    private NetEaseMainFinancialDTO getObjectFromString(String str, String code, String dbNo) {
-        if (str == null || str.startsWith("报告日期")) {
-            return null;
-        }
-        String[] data = str.split(",");
-        if (data.length < 15) {
-            return null;
-        }
-        NetEaseMainFinancialDTO dto = new NetEaseMainFinancialDTO();
-        dto.setDbInstanceId(dbNo);
-        dto.setCreateDate(data[0]);
-        dto.setCode(code);
 
-        dto.setBusinessInterest(Double.valueOf(toBeTrans(data[6])));
-        dto.setCashGenPerShare(Double.valueOf(toBeTrans(data[6])));
-        dto.setCashGenTotal(Double.valueOf(toBeTrans(data[6])));
-        dto.setDebtFlow(Double.valueOf(toBeTrans(data[6])));
-        dto.setDebtTotal(Double.valueOf(toBeTrans(data[6])));
-        dto.setMainBusinessIncome(Double.valueOf(toBeTrans(data[6])));
-        dto.setMainBusinessInterest(Double.valueOf(toBeTrans(data[6])));
-        dto.setPureInterest(Double.valueOf(toBeTrans(data[6])));
-        dto.setShareHolderBig(Double.valueOf(toBeTrans(data[6])));
-        dto.setTotalInterest(Double.valueOf(toBeTrans(data[6])));
-
-        return dto;
-    }
-
-    private void writeDTOFromLineBatch(ArrayList<String> inputLineArr, String code, String dbNo) {
-//        if (inputLineArr.size() == 1) {
-//            return;
-//        }
-//        ArrayList al = new ArrayList<NetEaseMainFinancialDTO>();
-//        for (String inputLineStr : inputLineArr) {
-//            NetEaseMainFinancialDTO dto = getObjectFromString(inputLineStr, code, dbNo);
-//            if (dto == null) {
-//                continue;
-//            }
-//            al.add(dto);
-//        }
-//        if (!tryPersistBatch(al, 3)) {
-//            throw new RuntimeException();
-//        }
-    }
-
-    private List<NetEaseMainFinancialDTO> writeDTOFromLine(ArrayList<String> inputLineArr, String code, String dbNo) {
+    private void writeDTOFromLine(ArrayList<String> inputLineArr, String code, String dbNo) {
         if (inputLineArr.size() == 0 || inputLineArr.size() == 1) {
-            return null;
+            return ;
         }
+        String[] columnsInInputLine = inputLineArr.get(0).split(",");
         ArrayList<NetEaseMainFinancialDTO> ret = new ArrayList<NetEaseMainFinancialDTO>();
+        
         ArrayList<String> rewrittenArr = new ArrayList<String>();
-        for (int i = 0;i<inputLineArr.size();i++) {
-            String inputLineStr = inputLineArr.get(i);
-            String[] inputLineStrArr = inputLineStr.split(",");
-            StringBuffer stringI = new StringBuffer();
-            for(int j = 0;j< inputLineStrArr.length;j++){
-                stringI.append(","+inputLineStrArr[j]);
+        //00报告日期； 01记录1； 10基本每股收益
+        for (int i = 1;i<columnsInInputLine.length;i++) {
+            StringBuffer sb = new StringBuffer();
+            for(int j = 0;j< inputLineArr.size();j++){
+                String[] inputColumn = inputLineArr.get(j).split(",");
+                if(inputColumn.length != columnsInInputLine.length){
+                    break;
+                }
+                sb.append(inputColumn[i]+",");
             }
-            rewrittenArr.add(stringI.deleteCharAt(0).toString());
+            sb.deleteCharAt(sb.lastIndexOf(","));
+            rewrittenArr.add(sb.toString());
         }
         for(String s:rewrittenArr){
             String[] data = s.split(",");
-            NetEaseMainFinancialDTO dto = new NetEaseMainFinancialDTO();
+            
+            Map param = new HashMap<String, String>();
+            param.put("code", code);
+            param.put("createDate", data[0]);
+            param.put("dbInstanceId", dbNo);
+            NetEaseMainFinancialDTO dto = dalClient.queryForObject("netease.query_main_financial_by_code_createDate", param,
+                    NetEaseMainFinancialDTO.class);
+            if(dto != null){
+                continue;
+            }
+            dto = new NetEaseMainFinancialDTO();
             dto.setDbInstanceId(dbNo);
             dto.setCreateDate(data[0]);
             dto.setCode(code);
 
             dto.setBusinessInterest(Double.valueOf(toBeTrans(data[6])));
-            dto.setCashGenPerShare(Double.valueOf(toBeTrans(data[6])));
-            dto.setCashGenTotal(Double.valueOf(toBeTrans(data[6])));
-            dto.setDebtFlow(Double.valueOf(toBeTrans(data[6])));
-            dto.setDebtTotal(Double.valueOf(toBeTrans(data[6])));
-            dto.setMainBusinessIncome(Double.valueOf(toBeTrans(data[6])));
-            dto.setMainBusinessInterest(Double.valueOf(toBeTrans(data[6])));
-            dto.setPureInterest(Double.valueOf(toBeTrans(data[6])));
-            dto.setShareHolderBig(Double.valueOf(toBeTrans(data[6])));
-            dto.setTotalInterest(Double.valueOf(toBeTrans(data[6])));
+            dto.setCashGenPerShare(Double.valueOf(toBeTrans(data[3])));
+            dto.setCashGenTotal(Double.valueOf(toBeTrans(data[13])));
+            dto.setDebtFlow(Double.valueOf(toBeTrans(data[17])));
+            dto.setDebtTotal(Double.valueOf(toBeTrans(data[16])));
+            dto.setMainBusinessIncome(Double.valueOf(toBeTrans(data[4])));
+            dto.setMainBusinessInterest(Double.valueOf(toBeTrans(data[5])));
+            dto.setPureInterest(Double.valueOf(toBeTrans(data[10])));
+            dto.setShareHolderBig(Double.valueOf(toBeTrans(data[18])));
+            dto.setTotalInterest(Double.valueOf(toBeTrans(data[9])));
+            ret.add(dto);
         }
-
-        return ret;
+        if (!tryPersistBatch(ret, 3)) {
+            throw new RuntimeException();
+        }
     }
 
     private String toBeTrans(String data) {
-        return StringUtils.isBlank(data) ? "0" : data;
+        return StringUtils.isBlank(data) || !NumberUtils.isNumber(data) ? "0" : data;
     }
 
     private boolean tryPersistBatch(ArrayList dtoList, int times) {

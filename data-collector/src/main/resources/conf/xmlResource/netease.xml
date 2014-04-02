@@ -22,6 +22,12 @@
 				select count(0) as count from 163_statistics
     	]]>
 	</sql>
+
+		<sql id="query_main_financial_by_code_createDate">
+    	<![CDATA[
+				select * from 163_main_financial where code= :code and createDate = :createDate
+    	]]>
+	</sql>
 	
 <!-- 	    	    	SELECT * from  -->
 <!--     	    	(select * FROM stock_dev.163_statistics WHERE code = :code order by createDate DESC  LIMIT 400) g -->
