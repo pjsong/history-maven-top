@@ -1,20 +1,16 @@
 package site.netease;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import util.CodeListUtil;
-import bean.NetEaseDTO;
-import bean.NetEaseStatisticDTO;
 import bean.NetEaseDTO;
 import bean.NetEaseStatisticDTO;
 import codelist.CodeFilter;
@@ -27,123 +23,113 @@ public class WriterHistoryNetease {
     DalClient dalClient;
     @Autowired
     CodeFilter codeFilter;
-    private Integer[] upDownArr = new Integer[]{13,21,34,55,89,144,233,377};
-
-    /**对code遍历，递归遍历createDate**/
-    public void doHistoryCode(String codePrefix, String dbNo){
+    private Integer[] upDownArr = new Integer[] { 13, 21, 34, 55, 89, 144, 233, 377 };
+    private int countBegin = 400;
+    private boolean newStart = true;
+    /** 对code遍历，递归遍历createDate **/
+    @SuppressWarnings("rawtypes")
+    public void doHistoryCode(String codePrefix, String dbNo) {
         List<String> codeToCollect = codeFilter.getByKey(codePrefix);
-        for(String code:codeToCollect){
+        for (String code : codeToCollect) {
             Map param = new HashMap<String, String>();
             param.put("code", CodeListUtil.transLocalToNeteaseCode(code));
             param.put("dbInstanceId", dbNo);
-            List<NetEaseDTO> list_future = dalClient.queryForList("netease.query_price_by_code_asc", param,NetEaseDTO.class);
+            List<NetEaseDTO> list_all = dalClient.queryForList("netease.query_price_by_code_asc", param,
+                    NetEaseDTO.class);
+
+            Map<String, Object> map_statistics = dalClient.queryForMap(
+                    "netease.query_statistics_by_code_asc_limit_last", param);
+            Long count = (Long) map_statistics.get("count");
+            if (count > countBegin) {
+                count = count - countBegin;
+            } else {
+                count = 0l;
+            }
             List<NetEaseDTO> list_history = new ArrayList<NetEaseDTO>();
-            if(list_future == null || list_future.size() == 0){
+            if (list_all == null || list_all.size() == 0) {
                 continue;
             }
-            int list_future_size = list_future.size();
-            for (int i = 0; i < list_future_size ; i++) {
-                NetEaseDTO netEaseDTO = list_future.get(0);
-                list_future.remove(netEaseDTO);
-                doHistory(netEaseDTO, list_future, list_history, dbNo);
-                //list_history从当前往历史走
+            int list_all_size = list_all.size();
+            List<NetEaseDTO> list_future = new ArrayList<NetEaseDTO>();
+            list_future.addAll(list_all);
+            for (int i = 0; i < list_all_size; i++) {
+                NetEaseDTO netEaseDTO = list_all.get(i);
+                list_future.remove(0);
+                if (i >= count && !newStart) {//from specified position
+                    doHistory(netEaseDTO, list_future, list_history, dbNo);
+                }else if(newStart){//from zero
+                    doHistory(netEaseDTO, list_future, list_history, dbNo);
+                }
+                // list_history从当前往历史走
                 list_history.add(0, netEaseDTO);
             }
         }
     }
 
     /**
-     * code sample:002121.SZ
+     * 
      * **/
-    private void doHistory(NetEaseDTO yhDTO, List<NetEaseDTO> list_future, List<NetEaseDTO> list_history, String dbNo) {
-
-        for (Integer step : upDownArr) {
-            writeUpDownStats(yhDTO, list_future,step, true, dbNo);
-            writeUpDownStats(yhDTO, list_future,step, false, dbNo);
-        }
-        writeHighLowInDaysStats(yhDTO, list_history,dbNo);
-    }
-
-    private void writeHighLowInDaysStats(NetEaseDTO currentDTO, List<NetEaseDTO> list_history, String dbNo){
-        String str = WriterHistoryNeteaseHelper.inDaysHighLowWrite(currentDTO, list_history, dbNo);
-        NetEaseStatisticDTO statsDTO = getCurrentStatisticsDTO(currentDTO, dbNo);
-        String[] highLow = str.split(";");
-        if(statsDTO == null){
+    private void doHistory(NetEaseDTO currentDTO, List<NetEaseDTO> list_future, List<NetEaseDTO> list_history,
+            String dbNo) {
+        NetEaseStatisticDTO statsDTO;
+        NetEaseStatisticDTO statsDTO_current = getCurrentStatisticsDTO(currentDTO, dbNo);
+        boolean oldDTOExists = statsDTO_current != null;
+        if (oldDTOExists) {
+            statsDTO = statsDTO_current;
+            statsDTO.setDbInstanceId(dbNo);
+        } else {
             statsDTO = new NetEaseStatisticDTO();
             statsDTO.setCode(currentDTO.getCode());
             statsDTO.setCreatedDate(currentDTO.getCreateDate());
             statsDTO.setDbInstanceId(dbNo);
-            statsDTO.setHighestInDays(Integer.valueOf(highLow[0]));
-            statsDTO.setLowestInDays(Integer.valueOf(highLow[1]));
-            dalClient.persist(statsDTO);
-        }else if(statsDTO.getHighestInDays() != Integer.valueOf(highLow[0]) || statsDTO.getLowestInDays() != Integer.valueOf(highLow[1])){
-            statsDTO.setDbInstanceId(dbNo);
-            statsDTO.setHighestInDays(Integer.valueOf(highLow[0]));
-            statsDTO.setLowestInDays(Integer.valueOf(highLow[1]));
+        }
+        for (Integer step : upDownArr) {
+            // write up stats
+            writeUpDownStats(statsDTO, currentDTO, list_future, step, true, dbNo);
+            // write down stats
+            writeUpDownStats(statsDTO, currentDTO, list_future, step, false, dbNo);
+        }
+        writeHighLowInDaysStats(statsDTO, currentDTO, list_history, dbNo);
+        if (oldDTOExists) {
             dalClient.dynamicMerge(statsDTO);
+        } else {
+            dalClient.persist(statsDTO);
         }
     }
-    
-   
-    private void writeUpDownStats(NetEaseDTO currentDTO, List<NetEaseDTO> listFuture,  int percentageStep, boolean isUp, String dbNo){
+
+    private void writeHighLowInDaysStats(NetEaseStatisticDTO statsDTO, NetEaseDTO currentDTO,
+            List<NetEaseDTO> list_history, String dbNo) {
+        String str = WriterHistoryNeteaseHelper.inDaysHighLowWrite(currentDTO, list_history, dbNo);
+        String[] highLow = str.split(";");
+        statsDTO.setHighestInDays(Integer.valueOf(highLow[0]));
+        statsDTO.setLowestInDays(Integer.valueOf(highLow[1]));
+    }
+
+    /** isup: percentage up or down **/
+    private void writeUpDownStats(NetEaseStatisticDTO statsDTO, NetEaseDTO currentDTO,
+            List<NetEaseDTO> listFuture, int percentageStep, boolean isUp, String dbNo) {
         String code = currentDTO.getCode();
         String createDate = currentDTO.getCreateDate();
         int str = WriterHistoryNeteaseHelper.upDownWrite(currentDTO, listFuture, percentageStep, isUp);
-        NetEaseStatisticDTO statsDTO = getCurrentStatisticsDTO(currentDTO, dbNo);
-        if(statsDTO == null){
-            statsDTO = new NetEaseStatisticDTO();
-            statsDTO.setCode(code);
-            statsDTO.setCreatedDate(createDate);
-            statsDTO.setDbInstanceId(dbNo);
-            if(isUp){
-                statsDTO.writeUpDownField("setUp"+percentageStep, str);
-            }else{
-                statsDTO.writeUpDownField("setDown"+percentageStep, str);
-            }
-            dalClient.persist(statsDTO);
-        } else if (isUp && 
-                (statsDTO.readUpDownField("getUp" + percentageStep) == null 
-                || !statsDTO.readUpDownField("getUp" + percentageStep).toString().equals(str+""))) {
-            statsDTO.setDbInstanceId(dbNo);
+        if (isUp) {
             statsDTO.writeUpDownField("setUp" + percentageStep, str);
-            dalClient.dynamicMerge(statsDTO);
-        } else if (!isUp && 
-                (statsDTO.readUpDownField("getDown" + percentageStep) == null 
-                || !statsDTO.readUpDownField("getDown" + percentageStep).toString().equals(str+""))) {
-            statsDTO.setDbInstanceId(dbNo);
+        } else {
             statsDTO.writeUpDownField("setDown" + percentageStep, str);
-            dalClient.dynamicMerge(statsDTO);
         }
+
     }
-    /**指定步长的数据**/
-//    private void writeStep1Stats(NetEaseDTO currentDTO, List<NetEaseDTO> list_desc, int step, ArrayList<Integer> breakPointArr, String dbNo){
-//        
-//        NetEaseStatisticDTO statsDTO = getCurrentStatisticsDTO(currentDTO, dbNo);
-//        String str = WriterHistoryNeteaseHelper.step1Write(WriterHistoryNeteaseHelper.step1PickUp(currentDTO, list_desc, step));
-//        if(statsDTO == null){
-//            statsDTO = new NetEaseStatisticDTO();
-//            statsDTO.setCode(currentDTO.getCode());
-//            statsDTO.setCreatedDate(currentDTO.getCreateDate());
-//            statsDTO.setDbInstanceId(dbNo);
-//            statsDTO.writeStepField("setStep"+step, str);
-//            dalClient.persist(statsDTO);
-//        }else if(StringUtils.isBlank(statsDTO.readStepField("getStep"+step))){
-//            statsDTO.setDbInstanceId(dbNo);
-//            statsDTO.writeStepField("setStep"+step, str);
-//            dalClient.dynamicMerge(statsDTO);
-//        }
-//    }
-    /** get dto by code and date**/
-//  SELECT * from yahoo_statistics WHERE code= :code and createDate = :createDate order by createDate desc
-    private NetEaseStatisticDTO getCurrentStatisticsDTO(NetEaseDTO currentDTO,  String dbNo){
+
+    /** get dto by code and date **/
+    // SELECT * from yahoo_statistics WHERE code= :code and createDate = :createDate order by createDate desc
+    private NetEaseStatisticDTO getCurrentStatisticsDTO(NetEaseDTO currentDTO, String dbNo) {
         String code = currentDTO.getCode();
         String createDate = currentDTO.getCreateDate();
         Map param = new HashMap<String, String>();
         param.put("code", code);
         param.put("dbInstanceId", dbNo);
         param.put("createDate", createDate);
-//        SELECT * from yahoo_statistics WHERE code= :code and createDate = :createDate order by createDate desc
-        return dalClient.queryForObject("netease.query_statistics_by_code_date_stats", param,
-                NetEaseStatisticDTO.class);
+        // SELECT * from yahoo_statistics WHERE code= :code and createDate = :createDate order by createDate desc
+        return dalClient
+                .queryForObject("netease.query_statistics_by_code_date_stats", param, NetEaseStatisticDTO.class);
     }
 }

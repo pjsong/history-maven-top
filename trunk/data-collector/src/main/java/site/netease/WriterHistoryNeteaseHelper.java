@@ -110,14 +110,18 @@ public class WriterHistoryNeteaseHelper {
         return highIndex+";"+lowIndex;
     }
     
-    /**list_desc is data of date after (not included) createDate
+    /**list_future is data of date after (not included) createDate
      * percentageStep is like 13,21,34,55,89,144,233,377
+     * return days interval when reached target percentageStep
      * **/
     static int upDownWrite(NetEaseDTO currentDTO, List<NetEaseDTO> list_future, int percentageStep, boolean isUp){
         if(list_future.size() <= 1 || currentDTO.getPriceHigh() == 0 || currentDTO.getPriceLow() == 0){
             return 0;
         }
         double priceCurrent = (currentDTO.getPriceHigh() + currentDTO.getPriceLow())/2;
+        if(priceCurrent == 0d){
+            return 0;
+        }
         for(int index = 1;index<list_future.size();index++){
             double priceIndexH = list_future.get(index).getPriceHigh();
             double priceIndexL = list_future.get(index).getPriceLow();
@@ -128,6 +132,9 @@ public class WriterHistoryNeteaseHelper {
             }
             if(isUp && (priceIndexM/priceCurrent) > (1d + new Double(percentageStep)/100)){
                 return index;
+            }
+            if(index == 500){
+                return 500;
             }
         }
         return 0;

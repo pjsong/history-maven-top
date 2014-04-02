@@ -10,6 +10,23 @@
     	    	SELECT rowId, code, createDate, priceHigh, priceLow, volumn from 163_history WHERE code= :code order by createDate asc
     	]]>
 	</sql>
+	
+		<sql id="query_price_by_code_startDate_asc">
+    	<![CDATA[
+    	    	SELECT rowId, code, createDate, priceHigh, priceLow, volumn from 163_history WHERE code= :code and createDate> :createDate order by createDate asc
+    	]]>
+	</sql>
+	
+		<sql id="query_statistics_by_code_asc_limit_last">
+    	<![CDATA[
+				select count(0) as count from 163_statistics
+    	]]>
+	</sql>
+	
+<!-- 	    	    	SELECT * from  -->
+<!--     	    	(select * FROM stock_dev.163_statistics WHERE code = :code order by createDate DESC  LIMIT 400) g -->
+<!-- 				ORDER BY g.createDate ASC -->
+	
 	<sql id="query_price_by_code_desc">
     	<![CDATA[
     	    	SELECT rowId, code, createDate, priceHigh, priceLow, volumn from 163_history WHERE code= :code order by createDate desc
