@@ -12,6 +12,6 @@ public class WriterHistoryNetEaseTest extends BaseTest{
     WriterHistoryNetease writerHistoryNetease;
   @Test
   public void doHistory() throws IOException {
-      writerHistoryNetease.doHistoryCode("sz002121", "00");
+      writerHistoryNetease.doHistoryCode("sz00", "00");
   }
 }
