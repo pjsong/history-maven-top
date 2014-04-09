@@ -106,7 +106,8 @@ public class NetEaseMainFinancialRead {
             dto.setDbInstanceId(dbNo);
             dto.setCreateDate(data[0]);
             dto.setCode(code);
-
+            dto.setBasicBenefitPerShare(Double.valueOf(toBeTrans(data[1])));
+            dto.setAssetsPerShare(Double.valueOf(toBeTrans(data[2])));
             dto.setBusinessInterest(Double.valueOf(toBeTrans(data[6])));
             dto.setCashGenPerShare(Double.valueOf(toBeTrans(data[3])));
             dto.setCashGenTotal(Double.valueOf(toBeTrans(data[13])));
@@ -117,6 +118,8 @@ public class NetEaseMainFinancialRead {
             dto.setPureInterest(Double.valueOf(toBeTrans(data[10])));
             dto.setShareHolderBig(Double.valueOf(toBeTrans(data[18])));
             dto.setTotalInterest(Double.valueOf(toBeTrans(data[9])));
+            dto.setAssetsTotal(Double.valueOf(toBeTrans(data[14])));
+            dto.setAssetsFlow(Double.valueOf(toBeTrans(data[15])));
             ret.add(dto);
         }
         if (!tryPersistBatch(ret, 3)) {
