@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ public class WriterHistoryNetease {
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     DalClient dalClient;
+    int tryCount = 3;
     @Autowired
     CodeFilter codeFilter;
     private Integer[] upDownArr = new Integer[] { 13, 21, 34, 55, 89, 144, 233, 377 };
@@ -91,9 +93,42 @@ public class WriterHistoryNetease {
         }
         writeHighLowInDaysStats(statsDTO, currentDTO, list_history, dbNo);
         if (oldDTOExists) {
-            dalClient.dynamicMerge(statsDTO);
+            boolean succeedFlag = false;
+            tryCount = 3;
+            while(tryCount>0){
+                try{
+                    dalClient.dynamicMerge(statsDTO);
+                    succeedFlag = true;
+                }catch(Exception e){
+                    tryCount--;
+                    try {
+                        TimeUnit.SECONDS.sleep(10);
+                    } catch (InterruptedException e1) {
+                    }
+                }
+                if (succeedFlag) {
+                    break;
+                }
+            }
+            
         } else {
-            dalClient.persist(statsDTO);
+            boolean succeedFlag = false;
+            tryCount = 3;
+            while(tryCount>0){
+                try{
+                    dalClient.persist(statsDTO);
+                    succeedFlag = true;
+                }catch(Exception e){
+                    tryCount--;
+                    try {
+                        TimeUnit.SECONDS.sleep(10);
+                    } catch (InterruptedException e1) {
+                    }
+                }
+                if (succeedFlag) {
+                    break;
+                }
+            }
         }
     }
 
@@ -128,8 +163,26 @@ public class WriterHistoryNetease {
         param.put("code", code);
         param.put("dbInstanceId", dbNo);
         param.put("createDate", createDate);
+        NetEaseStatisticDTO ret = null;
+        boolean succeedFlag = false;
+        tryCount = 3;
         // SELECT * from yahoo_statistics WHERE code= :code and createDate = :createDate order by createDate desc
-        return dalClient
-                .queryForObject("netease.query_statistics_by_code_date_stats", param, NetEaseStatisticDTO.class);
+        while (tryCount > 0) {
+            try {
+                ret = dalClient.queryForObject("netease.query_statistics_by_code_date_stats", param,
+                        NetEaseStatisticDTO.class);
+                succeedFlag = true;
+            } catch (Exception e) {
+                tryCount--;
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (InterruptedException e1) {
+                }
+            }
+            if (succeedFlag) {
+                return ret;
+            }
+        }
+        return ret;
     }
 }
