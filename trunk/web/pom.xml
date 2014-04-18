@@ -105,5 +105,6 @@
   </dependencies>
   <modules>
   	<module>../stock</module>
+  	<module>../amq-sample</module>
   </modules>
 </project>
