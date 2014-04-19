@@ -1,5 +1,5 @@
 
- 
+// http://briansjavablog.blogspot.jp/2012/09/spring-jms-tutorial-with-activemq.html
   package sample.mq;  
     
   import javax.jms.JMSException;  
