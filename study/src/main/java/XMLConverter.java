@@ -1,5 +1,5 @@
 //http://www.mkyong.com/spring3/spring-objectxml-mapping-example/
- 
+// http://castor.codehaus.org/reference/1.3.3rc1/html-single/XML%20data%20binding.html
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
