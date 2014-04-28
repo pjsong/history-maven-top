@@ -1,5 +1,7 @@
 package tools.validate;
+//http://www.springbyexample.org/
 //http://java.dzone.com/articles/bean-validation-made-simple
+//http://docs.jboss.org/hibernate/validator/4.0.1/reference/en/html/validator-customconstraints.html#validator-customconstraints-validator
 import java.util.Date;
 
 import javax.validation.constraints.Max;
