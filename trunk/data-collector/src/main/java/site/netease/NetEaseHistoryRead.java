@@ -64,8 +64,8 @@ public class NetEaseHistoryRead {
             // logger.info("exception thrown:{}", e);
             return;
         }
-        writeDTOFromLine(inputLineArr, code, dbNo);
-//        writeDTOFromLineBatch(inputLineArr, code, dbNo);
+//        writeDTOFromLine(inputLineArr, code, dbNo);
+        writeDTOFromLineBatch(inputLineArr, code, dbNo);
     }
 
     private NetEaseDTO getObjectFromString(String str, String code, String dbNo) {
