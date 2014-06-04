@@ -90,8 +90,8 @@ public class WriterHistoryNeteaseHelper {
         //current highest, lowest
         double baseHigh = currentDTO.getPriceHigh();
         double baseLow = currentDTO.getPriceLow();
-        boolean highContinued = true;
-        boolean lowContinued = true;
+        boolean highContinued = baseHigh>0.01d;
+        boolean lowContinued = baseLow>0.01d;
         for(int i = 0; i <list_history.size(); i++){
             if(highContinued && list_history.get(i).getPriceHigh() < baseHigh){
                 highIndex ++;
@@ -134,7 +134,7 @@ public class WriterHistoryNeteaseHelper {
                 return index;
             }
             if(index == 500){
-                return 500;
+                return 0;
             }
         }
         return 0;

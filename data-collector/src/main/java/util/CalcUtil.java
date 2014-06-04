@@ -89,4 +89,14 @@ public class CalcUtil {
 		}
 		
 	}
+	
+	public static String transDigitToStr(Integer counter, int size){
+	    StringBuffer sb = new StringBuffer();
+	    for(int i=0;i<size;i++){
+	        sb.append("0");
+	    }
+	    String totalString = sb.toString() + counter.toString();
+	    return totalString.substring(totalString.length() - size);
+	}
+	
 }

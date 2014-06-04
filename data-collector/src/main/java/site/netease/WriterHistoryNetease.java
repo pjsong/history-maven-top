@@ -26,7 +26,7 @@ public class WriterHistoryNetease {
     @Autowired
     CodeFilter codeFilter;
     private Integer[] upDownArr = new Integer[] { 13, 21, 34, 55, 89, 144, 233, 377 };
-    private int countBegin = 400;
+    private int countBegin = 378;
     private boolean newStart = true;
     /** 对code遍历，递归遍历createDate **/
     @SuppressWarnings("rawtypes")
@@ -136,6 +136,9 @@ public class WriterHistoryNetease {
             List<NetEaseDTO> list_history, String dbNo) {
         String str = WriterHistoryNeteaseHelper.inDaysHighLowWrite(currentDTO, list_history, dbNo);
         String[] highLow = str.split(";");
+        if(highLow[0].equals("0")||highLow[1].equals("0")){
+            return;
+        }
         statsDTO.setHighestInDays(Integer.valueOf(highLow[0]));
         statsDTO.setLowestInDays(Integer.valueOf(highLow[1]));
     }
@@ -146,6 +149,9 @@ public class WriterHistoryNetease {
         String code = currentDTO.getCode();
         String createDate = currentDTO.getCreateDate();
         int str = WriterHistoryNeteaseHelper.upDownWrite(currentDTO, listFuture, percentageStep, isUp);
+        if(str == 0){
+            return;
+        }
         if (isUp) {
             statsDTO.writeUpDownField("setUp" + percentageStep, str);
         } else {

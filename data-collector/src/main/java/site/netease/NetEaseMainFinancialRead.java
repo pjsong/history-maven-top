@@ -100,7 +100,7 @@ public class NetEaseMainFinancialRead {
             NetEaseMainFinancialDTO dto = dalClient.queryForObject("netease.query_main_financial_by_code_createDate", param,
                     NetEaseMainFinancialDTO.class);
             if(dto != null){
-                continue;
+                break;
             }
             dto = new NetEaseMainFinancialDTO();
             dto.setDbInstanceId(dbNo);
