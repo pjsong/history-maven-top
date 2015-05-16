@@ -41,7 +41,16 @@ public abstract class TransactionOperation {
         }
         return defaultDataSource;
     }
-
+    
+    protected DataSource routeDataSource_1(RouteConfigDefault routeConfig, Object parameter) {
+        if (routeConfig != null) {
+            DataSource routeDataSource = routeConfig.route_1(parameter);
+            if (routeDataSource != null) {
+                return routeDataSource;
+            }
+        }
+        return defaultDataSource;
+    }
     /**
      * 功能描述: <br>
      * 〈功能详细描述〉
