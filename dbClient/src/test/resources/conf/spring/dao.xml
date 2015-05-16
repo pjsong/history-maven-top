@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:p="http://cxf.apache.org/policy" xmlns:ss="http://www.springframework.org/schema/security"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+   	http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd 
+   	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd 
+   	http://cxf.apache.org/policy http://cxf.apache.org/schemas/policy.xsd
+   	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+   	http://cxf.apache.org/bindings/soap http://cxf.apache.org/schemas/configuration/soap.xsd 
+   	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd 
+   	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd 
+   	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+
+	<!-- 数据源配置 -->
+	<bean id="dataSource1"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="@{datasource1.driver}" />
+		<property name="url" value="@{datasource1.url}" />
+		<property name="username" value="@{datasource1.username}" />
+		<property name="password" value="@{datasource1.password}" />
+	</bean>
+
+	<bean id="dataSource2"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="@{datasource2.driver}" />
+		<property name="url" value="@{datasource2.url}" />
+		<property name="username" value="@{datasource2.username}" />
+		<property name="password" value="@{datasource2.password}" />
+	</bean>
+
+	<!-- <bean id="dataSourcePublic" -->
+	<!-- class="org.springframework.jdbc.datasource.DriverManagerDataSource"> -->
+	<!-- <property name="driverClassName" value="@{datasourcePublic.driver}" 
+		/> -->
+	<!-- <property name="url" value="@{datasourcePublic.url}" /> -->
+	<!-- <property name="username" value="@{datasourcePublic.username}" /> -->
+	<!-- <property name="password" value="@{datasourcePublic.password}" /> -->
+	<!-- </bean> -->
+
+	<bean id="route" class="dao.dal.RouteConfigDefault">
+		<!-- 数据源路由配置 -->
+		<property name="rules">
+			<map>
+				<!-- <entry key="'${route.dbInstanceId}'=='publicDB'" value-ref="dataSourcePublic" 
+					/> -->
+				<entry key="'${route.dbInstanceId}'=='00'" value-ref="dataSource1" />
+				<entry key="'${route.dbInstanceId}'=='01'" value-ref="dataSource2" />
+			</map>
+		</property>
+	</bean>
+
+
+	<bean id="xmlResource" class="dao.XmlResource">
+		<!-- SQL的Xml配置路径 -->
+		<property name="resources" value="classpath*:conf/xmlResource/sqlMap_*.xml" />
+	</bean>
+	<bean id="dalClient" class="dao.dal.impl.DalClientDefault">
+		<!-- SQL的Xml配置路径 -->
+		<property name="xmlResource" ref="xmlResource" />
+		<property name="routeConfigDefault" ref="route" />
+	</bean>
+
+</beans>
