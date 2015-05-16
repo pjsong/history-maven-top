@@ -1,6 +1,8 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,20 @@ public class EntityParserTest extends BaseTest{
         logger.debug(ep.getDelete());
     }
 
+  @Test
+  public void getInsertBatch(){
+	  List list = new ArrayList<Ordi>();
+	  for(int i=0;i<4;i++){
+		  Ordi ordi = new Ordi();
+		  ordi.setOrderId("1111111");
+		  ordi.setAbBankFlag("x");
+		  ordi.setActiveFlag(1);
+		  list.add(ordi);
+	  }
+	  EntityParser epList = EntityParser.getEntityListParser(Ordi.class, list);
+	  logger.debug(epList.getBatchInsert());
+  }
+  
   @Test
   public void getDynamicUpdate() {
       mapParam.clear();
