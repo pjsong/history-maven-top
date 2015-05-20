@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import constants.DbInstanceId;
+
 import java.sql.Time;
 
 
