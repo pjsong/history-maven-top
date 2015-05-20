@@ -67,7 +67,11 @@ public class DataBaseOperation extends TransactionOperation {
         Map<String, Object> paramMap = sqlParser.parser(entity);
         logMessage("persist", insertSQL, paramMap);
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        getValidateJdbcTemplate(paramMap).update(insertSQL, new MapSqlParameterSource(paramMap), keyHolder);
+        try{
+        	getValidateJdbcTemplate(paramMap).update(insertSQL, new MapSqlParameterSource(paramMap), keyHolder);
+        }catch(Exception e){
+        	logger.error(paramMap.toString());
+        }
         Object key = paramMap.get(sqlParser.getId());
         if (key == null) {
             return (T) keyHolder.getKey();
